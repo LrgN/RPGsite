@@ -1,0 +1,77 @@
+body{
+	margin: 0 auto;
+	text-align: center;
+}
+
+#userDamage{
+	position: absolute;
+	left: 50px;
+	bottom: 180px;
+	height: 100px;
+	width: 100px;
+}
+
+#userDamage h1{
+	font-size: 2em;
+}
+
+#monsterDamage{
+	position: absolute;
+	right:137px;
+	bottom: 235px;
+	height: 60px;
+	width: 60px;
+}
+
+#container{
+	background-image: url("../images/field.jpg");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	height: 600px;
+	width: 800px;
+	margin: 0 auto;
+	position: relative;
+}
+
+#user-menu{
+	width: 100%;
+	margin: 0 auto;
+	position: relative;
+	float: left;
+}
+
+#battle-dialogue{
+	border-radius: 5px;
+	width:100%;
+}
+
+#user{
+	position: absolute;
+	left: -140px;
+	bottom: 10px;
+	margin-bottom: 30px;
+	text-align:center;
+}
+
+#player{
+	height: 200px;
+	width: 250px;
+}
+
+#monster {
+	position: absolute;
+	right: -110px;
+	bottom: -10px;
+	text-align:center;
+}
+
+#skeleton{
+	height: 300px;
+	width: 300px;
+}
+
+.choice{
+	width: 120px;
+	height: 60px;
+	border-radius: 5px;
+}

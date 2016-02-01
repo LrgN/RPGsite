@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/jquery-ui-git.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
+    <title>Monster Battle</title>
+  </head>
+  <body>
+
+  	<div id = 'container'>
+      <h1 id="battle-dialogue">On your way to the village of Anselton a monster jumps out of the bush...</h1>
+      <main id="user-menu">
+	      <h2>Would you like to...</h2>
+	      <form>
+	        <button type="button" id="attack" class="choice">attack</button>
+	        <button type="button" id="defend" class="choice">defend</button>
+	        <button type="button" id="heal" class="choice">heal</button>
+	      </form>
+    	</main>
+      <div id="user">
+        <img src="images/knight.png" id = "player">
+      </div>
+      <div id="monster">
+        <img src="images/monster.png" id = "skeleton">
+      </div>
+      <div id = 'userDamage'></div>
+  		<div id = 'monsterDamage'></div>
+    </div>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/jquery-ui-git.js"></script>
+<script language="javascript" type="text/javascript" src="js/script.js"></script>
+  </body>
+</html>
