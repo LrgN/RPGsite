@@ -1,6 +1,17 @@
+@font-face {
+    font-family: pixel;
+    src: url('../libs/PressStart2P.ttf');
+}
+
+*{
+	font-family: pixel;
+}
+
 body{
-	margin: 0 auto;
+	margin: -100 auto;
 	text-align: center;
+	background: linear-gradient(#40AB3B, #FFFFFF);
+	height: 100%;
 }
 
 #userDamage{
@@ -11,8 +22,42 @@ body{
 	width: 100px;
 }
 
+#menu-container{
+	width: 400px;
+	height: 100px;
+	border: 4px solid white;
+	border-radius: 5px;
+	background: linear-gradient(#FFFFB0, blue);
+	text-align: center;
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1;
+}
+
 #userDamage h1{
 	font-size: 2em;
+}
+
+#user-menu{
+	list-style: none;
+	text-align: center;
+	float: left;
+}
+
+#user-menu li{
+	display: inline;
+	/*margin-right: 40px;*/
+	color: white;
+	float: left;
+	margin-right: 50px;
+}
+
+#user-menu li:nth-child(3){
+	margin-left: -15px;
 }
 
 #monsterDamage{
@@ -31,14 +76,10 @@ body{
 	width: 800px;
 	margin: 0 auto;
 	position: relative;
+	border-radius: 5px;
+	border: 8px inset grey;
 }
 
-#user-menu{
-	width: 100%;
-	margin: 0 auto;
-	position: relative;
-	float: left;
-}
 
 #battle-dialogue{
 	border-radius: 5px;
@@ -60,7 +101,7 @@ body{
 
 #monster {
 	position: absolute;
-	right: -110px;
+	right: -130px;
 	bottom: -10px;
 	text-align:center;
 }
