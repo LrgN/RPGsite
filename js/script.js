@@ -1,3 +1,5 @@
+$('#menu-container').hide();
+$('#stat-container').hide();
 $(document).ready(function(){
 
 //creates audio variables for music/sound
@@ -6,7 +8,7 @@ var hitAudio = new Audio('./sounds/hit.wav');
 var healAudio = new Audio('./sounds/cure.wav');
 var killAudio = new Audio('./sounds/kill.wav');
 var mAttack = new Audio('./sounds/somersalt.wav');
-// audio.play();
+var introMusic = new Audio('./sounds/8bit.mp3');
 
 var introText = "On your way to the village of Anselton a monster jumps out of the bush...";
 var splitIntro = introText.split("");
@@ -16,22 +18,29 @@ $('#user').hide();
 
 var beginBattle = function(){
 	console.log("hi");
+	$('#menu-container').show();
 	$('#user').show();
 	$('#monster').show();
+	$('#battle-dialogue').hide();
+	$('#stat-container').show().animate();
+	appendStats();
 	$('#monster').animate({	right: "0px", bottom: "-10px"});
 	$('#user').animate({	left: "-40px", bottom: "10px"});
+	audio.play();
 }
 
 //Intro sequence
 $(splitIntro).each(function(index){
 	var value = $(this);
+	introMusic.play();
 	setTimeout( function(){
 		$("#battle-dialogue").append(splitIntro[index]);
 		if(index + 1 === splitIntro.length){
+			introMusic.pause();
 			beginBattle();
 		}
 	}, 100 * (index + 1));
-})
+}, 10000)
 
 //Creates character objects
 var monster = {hp: 20,
@@ -143,13 +152,24 @@ var player = {hp: 20,
 
 	};
 
+	//append stats function
+	var appendStats = function(){
+		$('#health').html("HP: " + player.hp);
+		$('#magic').html("MP:" + player.mp);
+	}
+
 	//algorithm to change HP based on user and monster choices
 	function userTurn(){
-		monster.hp = (monster.hp - (user.damage / monster.defend)) + monster.heal;
+		monster.hp = (monster.hp - (player.damage / monster.defend)) + monster.heal;
 		if(player.choice == 'attack'){
 			userAttack();
 			hitAudio.play();
+			appendStats();
+			console.log(monster.hp);
+			console.log(player.hp);
 		}else if(player.choice == 'heal'){
+			player.heal -= 10;
+			appendStats();
 			healAudio.play();
 		}
 	};
@@ -159,8 +179,11 @@ var player = {hp: 20,
 		if(monster.choice == 1){
 			monsterAttack();
 			mAttack.play();
+			appendStats();
 		}else if(monster.choice == 3){
 			healAudio.play();
+			appendStats();
+			monster.heal -= 10;
 		}
 	}
 
@@ -179,9 +202,11 @@ var player = {hp: 20,
 		if(player.hp <= 0){
 			$("#user").toggle("explode");
 		  $("#user-menu").hide();
+		  $("#stat-container").hide();
 		  audio.pause();
 		  var defeatAudio = new Audio('./sounds/defeat.mp3');
 			defeatAudio.play();
+			$('#menu-container').hide();
 	    $("#battle-dialogue").empty().append("YOU'VE BEEN DEFEATED!");
 	    $("#skeleton").animate({right: "200px", height: "400px", width: "400px"});
 	    $("#monster").animate({right: "200px"});
@@ -190,6 +215,7 @@ var player = {hp: 20,
 	  
 		  $("#monster").toggle('explode');
 			$("#user-menu").hide();
+			$("#stat-container").hide();
 			audio.pause();
 			var victoryAudio = new Audio('./sounds/victory.mp3');
 			killAudio.play();
