@@ -1,5 +1,9 @@
+//hides content for later use
 $('#menu-container').hide();
 $('#stat-container').hide();
+$('#monster').hide();
+$('#user').hide();
+
 $(document).ready(function(){
 
 //creates audio variables for music/sound
@@ -13,11 +17,9 @@ var introMusic = new Audio('./sounds/8bit.mp3');
 var introText = "On your way to the village of Anselton a monster jumps out of the bush...";
 var splitIntro = introText.split("");
 
-$('#monster').hide();
-$('#user').hide();
+
 
 var beginBattle = function(){
-	console.log("hi");
 	$('#menu-container').show();
 	$('#user').show();
 	$('#monster').show();
@@ -40,7 +42,7 @@ $(splitIntro).each(function(index){
 			beginBattle();
 		}
 	}, 100 * (index + 1));
-}, 10000)
+})
 
 //Creates character objects
 var monster = {hp: 20,
@@ -55,7 +57,8 @@ var player = {hp: 20,
 							 defend: 0,
 							 heal: 0,
 							 choice: "",
-							 clicked: false};
+							 clicked: false,
+							 name: "Mark"};
 	
 	// var monsterHP = 20, userHP = 20;
 	// var monsterMP = 20, userMP = 20;
@@ -65,22 +68,35 @@ var player = {hp: 20,
 	// var choice;
 	// var clicked = false;
 	
+	var showAction = function(){
+		if(monster.damage > 0){
+			$('#userDamage').html("<h1>" + monster.damage + "</h1>").animate({bottom: "+=60px", opacity: "0", color: "red"}, 1000, function(){
+	  	$('#userDamage').html("").css({bottom: "-=60px", opacity: "1"});
+			});
+		}
+		if(player.damage > 0){
+			$('#monsterDamage').html("<h1>" + player.damage + "</h1>").animate({bottom: "+=40px", opacity: "0", color: "red"}, 1000, function(){
+	  	$('#monsterDamage').html("").css({bottom: "-=40px", opacity: "1"});
+	  	});
+		}
+	}
+
 	//animates player character to show that the knight attacked
 	var userAttack = function(){
 	  $('#user').animate({left: "+=30px"}, 'fast')
 	  $('#user').animate({left: "-=30px"}, 'fast')
-	  $('#userDamage').html("<h1>" + monster.damage + "</h1>").animate({bottom: "+=60px", opacity: "0", color: "red"}, 1000, function(){
-	  	$('#userDamage').html("").css({bottom: "-=60px", opacity: "1"});
-	  });	
-	  
+	  if(monster.choice == 1){
+	  	showAction();
+	  }	
 	}
+
 	//animates monster character to show that the monster attacked
 	var monsterAttack = function(){
 		$('#monster').animate({right: "+=30px"}, 'fast')
 		$('#monster').animate({right: "-=30px"}, 'fast')
-		$('#monsterDamage').html("<h1>" + player.damage + "</h1>").animate({bottom: "+=40px", opacity: "0"}, 1000, function(){
-	  	$('#monsterDamage').html("").css({bottom: "-=40px", opacity: "1"});
-	  });
+		if(player.choice == "attack"){
+			showAction();
+		}
 	}	
 
 
@@ -91,6 +107,7 @@ var player = {hp: 20,
 	      switch (monster.choice) {
 	      case 1:
 	        monster.damage = 1 + (Math.floor(Math.random() * 10));
+	        console.log(monster.damage);
 	        monster.defend = 1;
 	        monster.heal = 0;
 	        break;
@@ -110,6 +127,8 @@ var player = {hp: 20,
 					monster.damage = 1 + (Math.floor(Math.random() * 10));
 					monster.defend = 1;
 					monster.heal = 0;
+					console.log(monster.damage);
+					console.log(player.damage)
 					break;
 				//monster defends
 				case 2:
@@ -154,6 +173,7 @@ var player = {hp: 20,
 
 	//append stats function
 	var appendStats = function(){
+		$('#name').html("Character:" + player.name)
 		$('#health').html("HP: " + player.hp);
 		$('#magic').html("MP:" + player.mp);
 	}
@@ -161,29 +181,22 @@ var player = {hp: 20,
 	//algorithm to change HP based on user and monster choices
 	function userTurn(){
 		monster.hp = (monster.hp - (player.damage / monster.defend)) + monster.heal;
+		showAction();
 		if(player.choice == 'attack'){
 			userAttack();
 			hitAudio.play();
-			appendStats();
-			console.log(monster.hp);
-			console.log(player.hp);
 		}else if(player.choice == 'heal'){
-			player.heal -= 10;
-			appendStats();
 			healAudio.play();
 		}
 	};
 
 	function monsterTurn(){
 		player.hp = (player.hp - (monster.damage / player.defend)) + player.heal;
-		if(monster.choice == 1){
+		if(monster.choice === 1){
 			monsterAttack();
 			mAttack.play();
-			appendStats();
 		}else if(monster.choice == 3){
 			healAudio.play();
-			appendStats();
-			monster.heal -= 10;
 		}
 	}
 
@@ -201,26 +214,27 @@ var player = {hp: 20,
 	function endGame() {
 		if(player.hp <= 0){
 			$("#user").toggle("explode");
-		  $("#user-menu").hide();
+			$('#menu-container').hide();
 		  $("#stat-container").hide();
 		  audio.pause();
 		  var defeatAudio = new Audio('./sounds/defeat.mp3');
 			defeatAudio.play();
-			$('#menu-container').hide();
-	    $("#battle-dialogue").empty().append("YOU'VE BEEN DEFEATED!");
+	    $("#battle-dialogue").html("<h1>YOU'VE BEEN DEFEATED!</h1>");
+	    $("#battle-dialogue").show();
 	    $("#skeleton").animate({right: "200px", height: "400px", width: "400px"});
 	    $("#monster").animate({right: "200px"});
 		}
 		else if(monster.hp <=0){
 	  
 		  $("#monster").toggle('explode');
-			$("#user-menu").hide();
+			$("#menu-container").hide();
 			$("#stat-container").hide();
 			audio.pause();
 			var victoryAudio = new Audio('./sounds/victory.mp3');
 			killAudio.play();
 			victoryAudio.play();
-		  $("#battle-dialogue").empty().append("You Defeated the Monster!");
+		  $("#battle-dialogue").html("<h1>You Defeated the Monster!</h1>");
+		  $("#battle-dialogue").show();
 		  $("#player").animate({left: "360px", height: "400px", width: "500px"});
 	  	$("#user").animate({left: "160px"});
 	  }
@@ -238,10 +252,9 @@ var player = {hp: 20,
 			monsterChoice();
 			userChoice();
 			userTurn();
-			monsterTurn(function(){
-
-			}, 2000);
+			monsterTurn();
 	    belowZero();
+	    appendStats();
 			// dialogue();
 			endGame();
 			player.clicked = false;
@@ -257,10 +270,9 @@ var player = {hp: 20,
 	    monsterChoice();
 	    userChoice();
 	    userTurn();
-	    monsterTurn(function(){
-
-	    }, 2000);
+	    monsterTurn();
 	    belowZero();
+	    appendStats();
 	    // dialogue();
 	    endGame();
 	    player.clicked = false;
@@ -278,7 +290,9 @@ var player = {hp: 20,
 	        monsterChoice();
 	        userChoice();
 	        userTurn();
+	        monsterTurn();
 	        belowZero();
+	        appendStats();
 	        // dialogue();
 	        endGame();
 	        player.clicked = false;
