@@ -35,12 +35,20 @@ body{
 	margin: 20px 0;
 }
 
-#userDamage{
+#userDamage, #userHeal{
 	position: absolute;
 	left: 50px;
 	bottom: 180px;
 	height: 100px;
 	width: 100px;
+}
+
+#monsterDamage, #monsterHeal{
+	position: absolute;
+	right:137px;
+	bottom: 235px;
+	height: 60px;
+	width: 60px;
 }
 
 #menu-container{
@@ -75,18 +83,11 @@ body{
 	color: white;
 	float: left;
 	margin-right: 50px;
+	cursor: pointer;
 }
 
 #user-menu li:nth-child(3){
 	margin-left: -15px;
-}
-
-#monsterDamage{
-	position: absolute;
-	right:137px;
-	bottom: 235px;
-	height: 60px;
-	width: 60px;
 }
 
 #container{
@@ -108,12 +109,20 @@ body{
 	width:100%;
 }
 
+#battle-dialogue p{
+	font-size: 0.7em;
+}
+
 #user{
 	position: absolute;
 	left: -140px;
 	bottom: 10px;
 	margin-bottom: 30px;
 	text-align:center;
+}
+
+#user:hover, #monster:hover	{
+	transform: scale(-1, 1);
 }
 
 #player{

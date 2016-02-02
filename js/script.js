@@ -18,7 +18,7 @@ var introText = "On your way to the village of Anselton a monster jumps out of t
 var splitIntro = introText.split("");
 
 
-
+//Populates the container div for battle, starts battle audio
 var beginBattle = function(){
 	$('#menu-container').show();
 	$('#user').show();
@@ -38,8 +38,14 @@ $(splitIntro).each(function(index){
 	setTimeout( function(){
 		$("#battle-dialogue").append(splitIntro[index]);
 		if(index + 1 === splitIntro.length){
-			introMusic.pause();
-			beginBattle();
+			$("#battle-dialogue").append("<p>Press Enter to Continue</p>");		
+			document.addEventListener('keypress', function (e) {
+    	var key = e.which || e.keyCode;
+   		  if (key === 13) { 
+   		  	introMusic.pause();
+      		beginBattle();
+    		}
+			});
 		}
 	}, 100 * (index + 1));
 })
@@ -60,24 +66,26 @@ var player = {hp: 20,
 							 clicked: false,
 							 name: "Mark"};
 	
-	// var monsterHP = 20, userHP = 20;
-	// var monsterMP = 20, userMP = 20;
-	// var userDMG, monsterDMG;
-	// var defend, mDefend;
-	// var medic = 0; mHeal = 0;
-	// var choice;
-	// var clicked = false;
-	
 	var showAction = function(){
 		if(monster.damage > 0){
-			$('#userDamage').html("<h1>" + monster.damage + "</h1>").animate({bottom: "+=60px", opacity: "0", color: "red"}, 1000, function(){
+			$('#userDamage').html("<h1>" + Math.floor(monster.damage/player.defend) + "</h1>").animate({bottom: "+=60px", opacity: "0", color: "red"}, 1000, function(){
 	  	$('#userDamage').html("").css({bottom: "-=60px", opacity: "1"});
 			});
 		}
 		if(player.damage > 0){
-			$('#monsterDamage').html("<h1>" + player.damage + "</h1>").animate({bottom: "+=40px", opacity: "0", color: "red"}, 1000, function(){
+			$('#monsterDamage').html("<h1>" + Math.floor(player.damage/monster.defend) + "</h1>").animate({bottom: "+=40px", opacity: "0", color: "red"}, 1000, function(){
 	  	$('#monsterDamage').html("").css({bottom: "-=40px", opacity: "1"});
 	  	});
+		}
+		if(player.choice == "heal"){
+			$('#userHeal').html("<img src='./images/heal.png'>").animate({bottom: "-=40px", opacity: "0"}, 1000, function(){
+				$('#userHeal').html("").css({bottom: "+=40px", opacity: "1"});
+			})
+		}
+		if(monster.choice == 3){
+			$('#monsterHeal').html("<img src='./images/heal.png'>").animate({bottom: "-=60px", opacity: "0"}, 1000, function(){
+				$('#monsterHeal').html("").css({bottom: "+=60px", opacity: "1"});
+			})
 		}
 	}
 
@@ -99,7 +107,7 @@ var player = {hp: 20,
 		}
 	}	
 
-
+	//function to run through the monsters roll
 	function monsterChoice() {
 		//checks to see if monster has available MP for heal if so it runs
 	  if(monster.mp == 0){
@@ -107,7 +115,6 @@ var player = {hp: 20,
 	      switch (monster.choice) {
 	      case 1:
 	        monster.damage = 1 + (Math.floor(Math.random() * 10));
-	        console.log(monster.damage);
 	        monster.defend = 1;
 	        monster.heal = 0;
 	        break;
@@ -127,8 +134,6 @@ var player = {hp: 20,
 					monster.damage = 1 + (Math.floor(Math.random() * 10));
 					monster.defend = 1;
 					monster.heal = 0;
-					console.log(monster.damage);
-					console.log(player.damage)
 					break;
 				//monster defends
 				case 2:
@@ -148,7 +153,7 @@ var player = {hp: 20,
 
 	};
 
-	//Assigns numbers for user choice algorithm based on user selection
+	//Assigns numbers for battle algorithm based on user selection
 	function userChoice() {
 		switch (player.choice) {
 			case "attack":
@@ -175,12 +180,12 @@ var player = {hp: 20,
 	var appendStats = function(){
 		$('#name').html("Character:" + player.name)
 		$('#health').html("HP: " + player.hp);
-		$('#magic').html("MP:" + player.mp);
+		$('#magic').html("MP:   " + player.mp);
 	}
 
 	//algorithm to change HP based on user and monster choices
 	function userTurn(){
-		monster.hp = (monster.hp - (player.damage / monster.defend)) + monster.heal;
+		monster.hp = Math.floor((monster.hp - (player.damage / monster.defend)) + monster.heal);
 		showAction();
 		if(player.choice == 'attack'){
 			userAttack();
@@ -191,7 +196,7 @@ var player = {hp: 20,
 	};
 
 	function monsterTurn(){
-		player.hp = (player.hp - (monster.damage / player.defend)) + player.heal;
+		player.hp = Math.floor((player.hp - (monster.damage / player.defend)) + player.heal);
 		if(monster.choice === 1){
 			monsterAttack();
 			mAttack.play();
