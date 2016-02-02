@@ -5,6 +5,7 @@ $('#monster').hide();
 $('#user').hide();
 
 
+
 $(document).ready(function(){
 
 //creates audio variables for music/sound
@@ -16,6 +17,7 @@ var mAttack = new Audio('./sounds/somersalt.wav');
 var preBattleMusic = new Audio('./sounds/8bit.mp3');
 var error = new Audio('./sounds/error.mp3');
 var introMusic = new Audio('./sounds/intro.mp3');
+var openScene = new Audio('./sounds/openscene.mp3')
 
 
 
@@ -33,6 +35,34 @@ var beginBattle = function(){
 	$('#user').animate({	left: "-40px", bottom: "10px"});
 	audio.play();
 }
+
+var openingScene = function(){
+	openOver = false;
+	var openText = "THE ADVENTURE OF DUBUS";
+	var splitOpenText = openText.split("");
+	$(splitOpenText).each(function(index){
+		openScene.play();
+		setTimeout(function(){
+			$("#open-dialogue").append(splitOpenText[index]);
+			if(index + 1 === splitOpenText.length){
+				$("#open-dialogue").append("<p>Press Enter to Begin</p>");
+				document.addEventListener('keypress', function(e){
+					var key = e.which || e.keyCode;
+					if(openOver == false){
+						if(key === 13){
+							openScene.pause();
+							introSequence();
+							$("#container3").hide();
+							openOver = true;
+						}
+					}
+				})
+			}
+		}, 100 * (index + 1));
+	})
+}
+
+openingScene();
 
 //Intro sequence
 var introSequence = function(){
@@ -52,7 +82,6 @@ var introSequence = function(){
 								introMusic.pause();
 								beginBattleIntro();
 								$("#container2").hide();
-								$("#container").show();
 								preIntroOver = true;
 							}
 						}
@@ -61,7 +90,6 @@ var introSequence = function(){
 		},100 * (index + 1));
 	})
 }
-
 
 
 
@@ -332,6 +360,5 @@ var player = {hp: 20,
 
 //Begins intro sequences
 
-introSequence();
 
 })

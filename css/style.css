@@ -15,8 +15,7 @@ body{
 	height: 100%;
 }
 
-#container{
-	background-image: url("../images/field.jpg");
+#container, #container2, #container3{
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	height: 600px;
@@ -29,30 +28,26 @@ body{
 	top: 9px;
 }
 
-#container1, #container2, #container3{
-
+#container{
+	background-image: url("../images/field.jpg");
+	z-index: 0;
+	
 }
 
 #container2{
 	background-image: url("../images/castle.png");
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	height: 600px;
-	width: 800px;
-	margin: 0 auto;
-	position: relative;
-	border-radius: 5px;
-	border: 8px inset grey;
-	overflow: hidden;
 	z-index: 1;
 	position: absolute;
-	top: 9px;
 	left: 228px;
 }
 
 #container3{
 	background-image: url("../images/intro.png");
+	z-index: 2;
+	position: absolute;
+	left: 228px;
 }
+
 
 
 #stat-container{
@@ -131,15 +126,17 @@ body{
 	margin-left: -15px;
 }
 
-
-
-#battle-dialogue, #intro-dialogue{
+#battle-dialogue, #intro-dialogue, #open-dialogue{
 	border-radius: 5px;
 	width:100%;
 }
 
-#battle-dialogue p, #intro-dialogue p{
+#battle-dialogue p, #intro-dialogue p, #open-dialogue p{
 	font-size: 0.7em;
+}
+
+#open-dialogue p{
+	margin-top: 400px;
 }
 
 #user{
