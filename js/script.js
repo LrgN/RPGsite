@@ -17,7 +17,7 @@ var mAttack = new Audio('./sounds/somersalt.wav');
 var preBattleMusic = new Audio('./sounds/8bit.mp3');
 var error = new Audio('./sounds/error.mp3');
 var introMusic = new Audio('./sounds/intro.mp3');
-var openScene = new Audio('./sounds/openscene.mp3')
+var openScene = new Audio('./sounds/openscene.mp3');
 
 
 
@@ -46,6 +46,8 @@ var openingScene = function(){
 			$("#open-dialogue").append(splitOpenText[index]);
 			if(index + 1 === splitOpenText.length){
 				$("#open-dialogue").append("<p>Press Enter to Begin</p>");
+				$("#open-dialogue").blink();
+				$("#open-dialogue").toggle("pulsate");
 				document.addEventListener('keypress', function(e){
 					var key = e.which || e.keyCode;
 					if(openOver == false){
@@ -103,7 +105,8 @@ var beginBattleIntro = function() {
 		setTimeout( function(){
 			$("#battle-dialogue").append(splitPreBattle[index]);
 			if(index + 1 === splitPreBattle.length){
-				$("#battle-dialogue").append("<p>Press Enter to Continue</p>");		
+				$("#battle-dialogue").append("<p>Press Enter to Continue</p>");	
+
 				document.addEventListener('keypress', function (e) {
 	    	var key = e.which || e.keyCode;
 	   		  if(preBattleOver == false){
