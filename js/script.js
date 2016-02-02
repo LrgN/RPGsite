@@ -17,6 +17,7 @@ var error = new Audio('./sounds/error.mp3');
 
 var introText = "On your way to the village of Anselton a monster jumps out of the bush...";
 var splitIntro = introText.split("");
+var introOver = false;
 
 
 //Populates the container div for battle, starts battle audio
@@ -34,7 +35,6 @@ var beginBattle = function(){
 
 //Intro sequence
 $(splitIntro).each(function(index){
-	var value = $(this);
 	introMusic.play();
 	setTimeout( function(){
 		$("#battle-dialogue").append(splitIntro[index]);
@@ -42,18 +42,22 @@ $(splitIntro).each(function(index){
 			$("#battle-dialogue").append("<p>Press Enter to Continue</p>");		
 			document.addEventListener('keypress', function (e) {
     	var key = e.which || e.keyCode;
-   		  if (key === 13) { 
+   		  if(introOver == false){
+   		  	if (key === 13) { 
    		  	introMusic.pause();
       		beginBattle();
-    		}
+      		introOver = true;
+    			}
+   		  }
+
 			});
 		}
 	}, 100 * (index + 1));
 })
 
 //Creates character objects
-var monster = {hp: 20,
-								mp: 20,
+var monster = {hp: 30,
+								mp: 10,
 								damage: 0,
 								defend: 0,
 								heal: 0,
@@ -115,7 +119,7 @@ var player = {hp: 20,
 	    monster.choice = 1 + (Math.floor(Math.random() * 2));
 	      switch (monster.choice) {
 	      case 1:
-	        monster.damage = 1 + (Math.floor(Math.random() * 10));
+	        monster.damage = 1 + (Math.floor(Math.random() * 5));
 	        monster.defend = 1;
 	        monster.heal = 0;
 	        break;
@@ -127,12 +131,14 @@ var player = {hp: 20,
 	      };
 	  //runs if monster has available MP to heal
 	  }else{
-		monster.choice = 1 + (Math.floor(Math.random() * 3));
+		monster.choice = 1 + (Math.floor(Math.random() * 5));
 		
 			switch (monster.choice) {
 				//monster attacks
 				case 1:
-					monster.damage = 1 + (Math.floor(Math.random() * 10));
+				case 4:
+				case 5:
+					monster.damage = 1 + (Math.floor(Math.random() * 5));
 					monster.defend = 1;
 					monster.heal = 0;
 					break;
@@ -147,7 +153,7 @@ var player = {hp: 20,
 					monster.damage = 0;
 					monster.defend = 1;
 					monster.heal = 5;
-					monster.mp -= 10;
+					monster.mp -= 5;
 					break;
 		}	
 	  	}
@@ -158,7 +164,7 @@ var player = {hp: 20,
 	function userChoice() {
 		switch (player.choice) {
 			case "attack":
-				player.damage = 1 + (Math.floor(Math.random() * 10));
+				player.damage = 1 + (Math.floor(Math.random() * 5));
 				player.defend = 1;
 				player.heal = 0;
 				break;
@@ -171,7 +177,7 @@ var player = {hp: 20,
 				player.damage = 0;
 				player.defend = 1;
 				player.heal = 5;
-				player.mp -= 10;
+				player.mp -= 5;
 				break;
 		}
 
@@ -198,7 +204,7 @@ var player = {hp: 20,
 
 	function monsterTurn(){
 		player.hp = Math.floor((player.hp - (monster.damage / player.defend)) + player.heal);
-		if(monster.choice === 1){
+		if(monster.choice === 1 || monster.choice === 4 || monster.choice === 5){
 			monsterAttack();
 			mAttack.play();
 		}else if(monster.choice == 3){
@@ -216,7 +222,7 @@ var player = {hp: 20,
 	  }
 	}
 
-	//Determines if game is over that begins endgame animation
+	//Determines if game is over then begins endgame animation
 	function endGame() {
 		if(player.hp <= 0){
 			$("#user").toggle("explode");
@@ -225,6 +231,8 @@ var player = {hp: 20,
 		  audio.pause();
 		  var defeatAudio = new Audio('./sounds/defeat.mp3');
 			defeatAudio.play();
+			$('#container').css({'background-image': 'none'}).animate({ backgroundColor: "#000000",
+															 			  														color: "white"}, 2000);
 	    $("#battle-dialogue").html("<h1>YOU'VE BEEN DEFEATED!</h1>");
 	    $("#battle-dialogue").show();
 	    $("#skeleton").animate({right: "200px", height: "400px", width: "400px"});
@@ -238,21 +246,15 @@ var player = {hp: 20,
 			audio.pause();
 			var victoryAudio = new Audio('./sounds/victory.mp3');
 			killAudio.play();
-			victoryAudio.play();
+			victoryAudio.play();	
 		  $("#battle-dialogue").html("<h1>You Defeated the Monster!</h1>");
 		  $("#battle-dialogue").show();
 		  $("#player").animate({left: "360px", height: "400px", width: "500px"});
 	  	$("#user").animate({left: "160px"});
 	  }
-
-		else{
-
-		}
 	};
 
-	//Event listener for user actions
-	$('#attack').click(function() {
-		player.choice = "attack";
+	var runGame = function(){
 		player.clicked = true;
 		if(player.clicked == true){
 			monsterChoice();
@@ -267,45 +269,26 @@ var player = {hp: 20,
 		}else{
 			player.clicked = false;
 		}
-			
+		setTimeout(function(){
+
+		}, 1200)
+	}
+
+	//Event listener for user actions
+	$('#attack').click(function() {
+		player.choice = "attack";
+		runGame();		
 	});
 	$('#defend').click(function() {
-			player.choice = "defend";
-			player.clicked = true; 
-	    if(player.clicked == true){
-	    monsterChoice();
-	    userChoice();
-	    userTurn();
-	    monsterTurn();
-	    belowZero();
-	    appendStats();
-	    // dialogue();
-	    endGame();
-	    player.clicked = false;
-	  }else{
-	    player.clicked = false;
-	  }
+		player.choice = "defend";
+		runGame();
 	});
 	$('#heal').click(function() {
-	  if(player.mp < 10){
+	  if(player.mp == 0){
 	    error.play();
 	  }else{
 			player.choice = "heal"; 
-			player.clicked = true;
-	      if(player.clicked == true){
-	        monsterChoice();
-	        userChoice();
-	        userTurn();
-	        monsterTurn();
-	        belowZero();
-	        appendStats();
-	        // dialogue();
-	        endGame();
-	        player.clicked = false;
-	      }else{
-	    		player.clicked = false;
-	      }
-	  }
+			runGame();
+		};
 	});
-
 })
