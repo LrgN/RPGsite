@@ -13,6 +13,7 @@ var healAudio = new Audio('./sounds/cure.wav');
 var killAudio = new Audio('./sounds/kill.wav');
 var mAttack = new Audio('./sounds/somersalt.wav');
 var introMusic = new Audio('./sounds/8bit.mp3');
+var error = new Audio('./sounds/error.mp3');
 
 var introText = "On your way to the village of Anselton a monster jumps out of the bush...";
 var splitIntro = introText.split("");
@@ -287,7 +288,7 @@ var player = {hp: 20,
 	});
 	$('#heal').click(function() {
 	  if(player.mp < 10){
-	    alert("Your MP is too low")
+	    error.play();
 	  }else{
 			player.choice = "heal"; 
 			player.clicked = true;
