@@ -4,6 +4,7 @@ $('#stat-container').hide();
 $('#monster').hide();
 $('#user').hide();
 
+
 $(document).ready(function(){
 
 //creates audio variables for music/sound
@@ -12,12 +13,12 @@ var hitAudio = new Audio('./sounds/hit.wav');
 var healAudio = new Audio('./sounds/cure.wav');
 var killAudio = new Audio('./sounds/kill.wav');
 var mAttack = new Audio('./sounds/somersalt.wav');
-var introMusic = new Audio('./sounds/8bit.mp3');
+var preBattleMusic = new Audio('./sounds/8bit.mp3');
 var error = new Audio('./sounds/error.mp3');
+var introMusic = new Audio('./sounds/intro.mp3');
 
-var introText = "On your way to the village of Anselton a monster jumps out of the bush...";
-var splitIntro = introText.split("");
-var introOver = false;
+
+
 
 
 //Populates the container div for battle, starts battle audio
@@ -34,26 +35,63 @@ var beginBattle = function(){
 }
 
 //Intro sequence
-$(splitIntro).each(function(index){
-	introMusic.play();
-	setTimeout( function(){
-		$("#battle-dialogue").append(splitIntro[index]);
-		if(index + 1 === splitIntro.length){
-			$("#battle-dialogue").append("<p>Press Enter to Continue</p>");		
-			document.addEventListener('keypress', function (e) {
-    	var key = e.which || e.keyCode;
-   		  if(introOver == false){
-   		  	if (key === 13) { 
-   		  	introMusic.pause();
-      		beginBattle();
-      		introOver = true;
-    			}
-   		  }
+var introSequence = function(){
+	var preIntroOver = false;
+	var introText = "You. The lone knight Sir Dubus have been aimlessly wandering hoping for clues on your missing princess... In the Lands of Lay you receive a lead that your princess may have been spotted with a mysterious wizard in the village of Anselton.  Without hesitation you embark on your journey..."
+	var splitIntroText = introText.split("");
+	$(splitIntroText).each(function(index){
+		introMusic.play();
+		setTimeout(function(){
+			$("#intro-dialogue").append(splitIntroText[index]);
+			if(index + 1 === splitIntroText.length){
+				$("#intro-dialogue").append("<p>Press Enter to Continue</p>");
+				document.addEventListener('keypress', function(e){
+					var key = e.which || e.keyCode;
+						if(preIntroOver == false){
+							if(key === 13){
+								introMusic.pause();
+								beginBattleIntro();
+								$("#container2").hide();
+								$("#container").show();
+								preIntroOver = true;
+							}
+						}
+				})
+			}
+		},100 * (index + 1));
+	})
+}
 
-			});
-		}
-	}, 100 * (index + 1));
-})
+
+
+
+//Pre-battle sequence
+var beginBattleIntro = function() {
+	var preBattleOver = false;
+	var preBattleText = "On your way to the village of Anselton a monster jumps out of the bush...";
+	var splitPreBattle = preBattleText.split("");
+	$(splitPreBattle).each(function(index){
+		preBattleMusic.play();
+		setTimeout( function(){
+			$("#battle-dialogue").append(splitPreBattle[index]);
+			if(index + 1 === splitPreBattle.length){
+				$("#battle-dialogue").append("<p>Press Enter to Continue</p>");		
+				document.addEventListener('keypress', function (e) {
+	    	var key = e.which || e.keyCode;
+	   		  if(preBattleOver == false){
+	   		  	if (key === 13) { 
+	   		  	preBattleMusic.pause();
+	      		beginBattle();
+	      		preBattleOver = true;
+	    			}
+		   		}
+
+				});
+			}
+		}, 100 * (index + 1));
+	})
+}
+
 
 //Creates character objects
 var monster = {hp: 30,
@@ -69,7 +107,7 @@ var player = {hp: 20,
 							 heal: 0,
 							 choice: "",
 							 clicked: false,
-							 name: "Mark"};
+							 name: "Dubus"};
 	
 	var showAction = function(){
 		if(monster.damage > 0){
@@ -291,4 +329,9 @@ var player = {hp: 20,
 			runGame();
 		};
 	});
+
+//Begins intro sequences
+
+introSequence();
+
 })

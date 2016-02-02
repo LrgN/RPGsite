@@ -8,11 +8,52 @@
 }
 
 body{
-	margin: -100 auto;
+	margin:  auto;
 	text-align: center;
 	background: linear-gradient(#40AB3B, #FFFFFF);
+	background-repeat: no-repeat;
 	height: 100%;
 }
+
+#container{
+	background-image: url("../images/field.jpg");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	height: 600px;
+	width: 800px;
+	margin: 0 auto;
+	position: relative;
+	border-radius: 5px;
+	border: 8px inset grey;
+	overflow: hidden;
+	top: 9px;
+}
+
+#container1, #container2, #container3{
+
+}
+
+#container2{
+	background-image: url("../images/castle.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	height: 600px;
+	width: 800px;
+	margin: 0 auto;
+	position: relative;
+	border-radius: 5px;
+	border: 8px inset grey;
+	overflow: hidden;
+	z-index: 1;
+	position: absolute;
+	top: 9px;
+	left: 228px;
+}
+
+#container3{
+	background-image: url("../images/intro.png");
+}
+
 
 #stat-container{
 	width: 300px;
@@ -90,26 +131,14 @@ body{
 	margin-left: -15px;
 }
 
-#container{
-	background-image: url("../images/field.jpg");
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	height: 600px;
-	width: 800px;
-	margin: 0 auto;
-	position: relative;
-	border-radius: 5px;
-	border: 8px inset grey;
-	overflow: hidden;
-}
 
 
-#battle-dialogue{
+#battle-dialogue, #intro-dialogue{
 	border-radius: 5px;
 	width:100%;
 }
 
-#battle-dialogue p{
+#battle-dialogue p, #intro-dialogue p{
 	font-size: 0.7em;
 }
 
@@ -128,6 +157,18 @@ body{
 #player{
 	height: 200px;
 	width: 250px;
+}
+
+#intro-dialogue{
+	position: absolute;
+}
+
+#intro-player{
+	height: 200px;
+	width: 250px;
+	position: absolute;
+	top: 128px;
+	left: 122px;
 }
 
 #monster {
