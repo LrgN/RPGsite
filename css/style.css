@@ -15,7 +15,7 @@ body{
 	height: 100%;
 }
 
-#container, #container2, #container3{
+#container, #container2, #container3, #container4, #container5{
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	height: 600px;
@@ -30,24 +30,37 @@ body{
 
 #container{
 	background-image: url("../images/field.jpg");
-	z-index: 0;
+	z-index: 2;
 	
 }
 
 #container2{
 	background-image: url("../images/castle.png");
-	z-index: 1;
+	z-index: 3;
 	position: absolute;
 	left: 228px;
 }
 
 #container3{
 	background-image: url("../images/intro.png");
-	z-index: 2;
+	z-index: 4;
 	position: absolute;
 	left: 228px;
 }
 
+#container4{
+	background-image: url("../images/inn.jpg");
+	z-index: 1;
+	position: absolute;
+	left: 228px;
+}
+
+#container5{
+	background-color: black;
+	z-index: 0;
+	position: absolute;
+	left: 228px;
+}
 
 
 #stat-container{
@@ -131,7 +144,7 @@ body{
 	width:100%;
 }
 
-#battle-dialogue p, #intro-dialogue p, #open-dialogue p{
+#battle-dialogue p, #intro-dialogue p, #open-dialogue p, #inn-dialogue p{
 	font-size: 0.7em;
 }
 
@@ -184,4 +197,32 @@ body{
 	width: 120px;
 	height: 60px;
 	border-radius: 5px;
+}
+
+#outro-dialogue{
+	font-size: 20px;
+}
+
+#dubus-container{
+	position: absolute;
+	bottom: -20px;
+	left: 100px;
+}
+
+#outro-dubus{
+	width: 600px;
+	height: 500px;
+}
+
+#tear-container{
+	position: absolute;
+	width: 60px;
+	height: 60px;
+	bottom: 190px;
+	left: 420px;
+}
+
+#tear-container img{
+	height: 50px;
+	width: 50px;
 }

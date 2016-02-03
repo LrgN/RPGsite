@@ -18,6 +18,7 @@ var preBattleMusic = new Audio('./sounds/8bit.mp3');
 var error = new Audio('./sounds/error.mp3');
 var introMusic = new Audio('./sounds/intro.mp3');
 var openScene = new Audio('./sounds/openscene.mp3');
+var outroMusic = new Audio('./sounds/torn.m4a')
 
 
 
@@ -36,6 +37,8 @@ var beginBattle = function(){
 	audio.play();
 }
 
+
+//Opening Scene
 var openingScene = function(){
 	openOver = false;
 	var openText = "THE ADVENTURE OF DUBUS";
@@ -46,8 +49,8 @@ var openingScene = function(){
 			$("#open-dialogue").append(splitOpenText[index]);
 			if(index + 1 === splitOpenText.length){
 				$("#open-dialogue").append("<p>Press Enter to Begin</p>");
-				$("#open-dialogue").blink();
-				$("#open-dialogue").toggle("pulsate");
+
+				$("#open-dialogue");
 				document.addEventListener('keypress', function(e){
 					var key = e.which || e.keyCode;
 					if(openOver == false){
@@ -64,12 +67,11 @@ var openingScene = function(){
 	})
 }
 
-openingScene();
 
 //Intro sequence
 var introSequence = function(){
 	var preIntroOver = false;
-	var introText = "You. The lone knight Sir Dubus have been aimlessly wandering hoping for clues on your missing princess... In the Lands of Lay you receive a lead that your princess may have been spotted with a mysterious wizard in the village of Anselton.  Without hesitation you embark on your journey..."
+	var introText = "You. The lone knight Sir Dubus have been aimlessly wandering hoping for clues on your missing princess... In the Lands of Lay you receive a lead that your princess may have been spotted with a mysterious wizard. They were last spotted in the village of Anselton.  Without hesitation you embark on your journey..."
 	var splitIntroText = introText.split("");
 	$(splitIntroText).each(function(index){
 		introMusic.play();
@@ -93,6 +95,55 @@ var introSequence = function(){
 	})
 }
 
+//Inn sequence
+var innSequence = function(){
+	var innOver = false;
+	var innText = "Upon arriving in Anselton you head straight to the inn.  Once inside you immediately find your princess... the wizard and her are sharing a bottle of chianti over candlelight while holding hands.  The princess explains to you that she needs some stability in her life and that a knight just can't give that to her. You leave in defeat."
+	var splitInnText = innText.split("");
+	$(splitInnText).each(function(index){
+		preBattleMusic.play();
+		setTimeout(function(){
+			$("#inn-dialogue").append(splitInnText[index]);
+			if(index + 1 === splitInnText.length){
+				$("#inn-dialogue").append("<p>Press Enter to Continue</p>");
+				document.addEventListener('keypress', function(e){
+					var key = e.which || e.keyCode;
+						if(innOver == false){
+							if(key === 13){
+								preBattleMusic.pause();
+								outroSequence();
+								$("#container4").hide().animate();
+								innOver = true;
+							}
+						}
+				})
+			}
+		},100 * (index + 1));
+	})
+}
+
+//outro sequence
+var outroSequence = function(){
+	var outroOver = false;
+	var outroText = ["Game Design: Mark Abel", "Animation: Mark Abel", "Art: Stolen From Varius Artists", "Written By: Mark Abel", "Music: Stolen from various Artists", "No Dubuses Were Harmed in the Making of this Game", "Thank you for playing", "Why are you still here?", "You really don't have anything better to do?", "Ok. Ok. I know this song rules", "Does anyone else touch themselves to this song?", "Was that too much information?", "You can leave now", "Or not", "Thanks again"]
+	$(outroText).each(function(index){
+		outroMusic.play();
+		setTimeout(function(){
+			$("#outro-dialogue").html("<h1>" + outroText[index] + "</h1>").animate({opacity: "1", color: "white"}, 5000, function(){
+			$("#outro-dialogue").animate({opacity: "0", color: "black"}, 9000)
+			});
+				if(index + 1 == outroText.length){
+					$("#dubus-container").hide("slow");
+					$("#tear-container").hide();
+				}
+				$('#tear-container').html("<img src='./images/tear.png'>").animate({bottom: "-=60px", opacity: "0"}, 2000, function(){
+				$('#tear-container').html("").css({bottom: "+=60px", opacity: "1"});
+				})	
+
+		}, 15000 * (index + 1))
+	})
+			
+}
 
 
 //Pre-battle sequence
@@ -306,20 +357,31 @@ var player = {hp: 20,
 	    $("#battle-dialogue").show();
 	    $("#skeleton").animate({right: "200px", height: "400px", width: "400px"});
 	    $("#monster").animate({right: "200px"});
+
 		}
 		else if(monster.hp <=0){
-	  
+	  	var battleOver = false;
 		  $("#monster").toggle('explode');
 			$("#menu-container").hide();
 			$("#stat-container").hide();
 			audio.pause();
 			var victoryAudio = new Audio('./sounds/victory.mp3');
-			killAudio.play();
 			victoryAudio.play();	
 		  $("#battle-dialogue").html("<h1>You Defeated the Monster!</h1>");
 		  $("#battle-dialogue").show();
 		  $("#player").animate({left: "360px", height: "400px", width: "500px"});
 	  	$("#user").animate({left: "160px"});
+	  	document.addEventListener('keypress', function (e) {
+	    	var key = e.which || e.keyCode;
+   		  if(battleOver == false){
+   		  	if (key === 13) { 
+   		  		victoryAudio.pause();
+   		  		$("#container").hide();
+      			innSequence();
+      			battleOver = true;
+    			}
+	   		}
+			});
 	  }
 	};
 
@@ -363,5 +425,6 @@ var player = {hp: 20,
 
 //Begins intro sequences
 
+openingScene();
 
 })
