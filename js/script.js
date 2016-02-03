@@ -193,10 +193,46 @@ var innSequence = function(){
 	})
 }
 
+//found princess sequence
+var foundPrincess = function(){
+	foundPrincessOver = false;
+	var openText = "You rush up to the princess, and you realize she is crying.  She informs you that she ran off with the wizard and that she is looking for some stability in her life, which a knight can't give her. She pulls a vial of poison out of her pocket and swallows it";
+	var splitOpenText = openText.split("");
+	$(splitOpenText).each(function(index){
+		preBattleMusic.currentTime = 0;
+		preBattleMusic.play();
+		setTimeout(function(){
+			$("#found-princess-dialogue").append(splitOpenText[index]);
+			if(index + 1 === splitOpenText.length){
+				$("#found-princess-dialogue").append("<p>Press Enter to Begin</p>");
+				$("#found-princess-dialogue");
+				document.addEventListener('keypress', function(e){
+					var key = e.which || e.keyCode;
+					if(foundPrincessOver == false){
+						if(key === 13){
+							$("#princess").toggle('explode');
+							setTimeout(function(){
+								preBattleMusic.pause();
+								outroSequence();
+								$("#inn-container").hide();
+								$("#found-princess-container").hide();
+								$("#dubus2").animate({opacity: "0"});
+								foundPrincessOver = true;
+							},3000)
+
+						}
+					}
+				})
+			}
+		}, 100 * (index + 1));
+	})
+}
+
+
 //outro sequence
 var outroSequence = function(){
 	var outroOver = false;
-	var outroText = ["Game Design: Mark Abel", "Animation:    Mark Abel",
+	var outroText = ["Game Design: Mark Abel", "Animation:      Mark Abel",
 									 "Written By: Mark Abel", "Art:          Stolen From Various Artists and Vecteezy", 
 									 "General Music: Stolen from various Artists", "Battle Music By:  Nobuo Uematsu", 
 									 "Thank you for playing", "Why are you still here?", "You really don't have anything better to do?", 
@@ -430,7 +466,7 @@ var outroSequence = function(){
    		  		victoryAudio.pause();
    		  		$("#battle-container").hide();
    		  		$("#inn-container").hide();
-      			outroSequence();
+      			foundPrincess();
       			battleOver = true;
     			}
 	   		}

@@ -10,12 +10,12 @@
 body{
 	margin:  auto;
 	text-align: center;
-	background: linear-gradient(#40AB3B, #FFFFFF);
+	background: black;
 	background-repeat: no-repeat;
 	height: 100%;
 }
 
-#battle-container, #intro-container, #opening-screen, #inn-container, #outro-container{
+#battle-container, #intro-container, #opening-screen, #inn-container, #outro-container, #found-princess-container{
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	height: 600px;
@@ -51,6 +51,7 @@ body{
 
 #found-princess-container{
 	background-image: url("../images/inn.jpg");
+	text-align: center;
 	z-index: 0;
 }
 
@@ -136,12 +137,11 @@ body{
 	margin-left: -15px;
 }
 
-#battle-dialogue, #intro-dialogue, #open-dialogue{
-	border-radius: 5px;
+#battle-dialogue, #intro-dialogue, #open-dialogue, #found-princess-dialogue{
 	width:100%;
 }
 
-#battle-dialogue p, #intro-dialogue p, #open-dialogue p, #inn-dialogue p{
+#battle-dialogue p, #intro-dialogue p, #open-dialogue p, #inn-dialogue p, #found-princess-dialogue p{
 	font-size: 0.7em;
 }
 
@@ -161,9 +161,22 @@ body{
 	transform: scale(-1, 1);
 }
 
-#player{
+#player, #dubus2{ 
 	height: 200px;
 	width: 250px;
+}
+
+#princess{
+	height: 200px;
+	width: 150px;
+}
+
+#together{
+	width: 550px;
+	text-align: center;
+	bottom: 52px;
+	left: 150px;
+	position: absolute;
 }
 
 #intro-dialogue{
@@ -228,4 +241,8 @@ body{
 #tear-container img{
 	height: 50px;
 	width: 50px;
+}
+
+#found-princes-dialogue h1{
+	font-size: .4em;
 }
