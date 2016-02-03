@@ -1,3 +1,5 @@
+$(document).ready(function(){
+
 //hides content for later use
 var hideBattleItems = function(){
 	$('#menu-container').hide();
@@ -6,10 +8,6 @@ var hideBattleItems = function(){
 	$('#user').hide();
 }
 
-
-
-
-$(document).ready(function(){
 
 //creates audio variables for music/sound
 var fight = new Audio('./sounds/fight.mp3');
@@ -58,7 +56,6 @@ var resetStats = function(){
 							 name: "Dubus"};
 }
 
-hideBattleItems();
 
 //Populates the container divs for battle, starts battle audio
 var beginBattle = function(){
@@ -73,26 +70,25 @@ var beginBattle = function(){
 	fight.play();
 }
 
-//Opening Scene
-var openingScene = function(){
-	openOver = false;
-	var openText = "THE ADVENTURE OF DUBUS";
-	var splitOpenText = openText.split("");
-	$(splitOpenText).each(function(index){
-		openScene.play();
+
+//attempting a function to switch scenes, cuz I'm a bitch
+
+var makeTextType = function(whichScene, text, sceneOver, nextScene, music){
+	var splitText = text.split("");
+	music.play();
+	$(splitText).each(function(index){
 		setTimeout(function(){
-			$("#open-dialogue").append(splitOpenText[index]);
-			if(index + 1 === splitOpenText.length){
+			$("#open-dialogue").append(splitText[index]);
+			if(index + 1 === splitText.length){
 				$("#open-dialogue").append("<p>Press Enter to Begin</p>");
-				$("#open-dialogue");
 				document.addEventListener('keypress', function(e){
 					var key = e.which || e.keyCode;
-					if(openOver == false){
+					if(sceneOver == false){
 						if(key === 13){
-							openScene.pause();
-							introSequence();
-							$("#opening-screen").hide();
-							openOver = true;
+							music.pause();
+							nextScene();
+							$(whichScene).hide();
+							sceneOver = true;
 						}
 					}
 				})
@@ -101,8 +97,20 @@ var openingScene = function(){
 	})
 }
 
+//Opening Scene
+var openingScene = function(){
+	var container = ("#opening-screen");
+	var music = openScene;
+	openOver = false;
+	var openText = "THE ADVENTURE OF DUBUS";
+	var nextScene = introSequence;
+	makeTextType(container, openText, openOver, nextScene, music)
+}
+
 //Intro sequence
 var introSequence = function(){
+	var container = ("#intro-container");
+	var music = introMusic;
 	var preIntroOver = false;
 	var introText = "You. The lone knight Sir Dubus have been aimlessly wandering hoping for clues on your missing princess... A passing peasant tells you that he saw a wizard and a princess heading towards Anselton.  Could this be your princess?";
 	var splitIntroText = introText.split("");
@@ -516,7 +524,7 @@ var outroSequence = function(){
 	});
 
 //Begins intro sequences
-
+hideBattleItems();
 openingScene();
 
 })
