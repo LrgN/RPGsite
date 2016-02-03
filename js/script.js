@@ -91,16 +91,17 @@ var introSequence = function(){
 						}
 				})
 			}
-		},100 * (index + 1));
+		},75 * (index + 1));
 	})
 }
 
 //Inn sequence
 var innSequence = function(){
 	var innOver = false;
-	var innText = "Upon arriving in Anselton you head straight to the inn.  Once inside you immediately find your princess... the wizard and her are sharing a bottle of chianti over candlelight while holding hands.  The princess explains to you that she needs some stability in her life and that a knight just can't give that to her. You leave in defeat."
+	var innText = "Upon arriving in Anselton you head straight to the inn.  Once inside you immediately find your princess... the wizard and her are sharing a bottle of chianti while holding hands.  The princess explains to you that she needs some stability in her life and that a knight just can't give that to her. You leave in defeat."
 	var splitInnText = innText.split("");
 	$(splitInnText).each(function(index){
+		preBattleMusic.currentTime = 0;
 		preBattleMusic.play();
 		setTimeout(function(){
 			$("#inn-dialogue").append(splitInnText[index]);
@@ -125,7 +126,7 @@ var innSequence = function(){
 //outro sequence
 var outroSequence = function(){
 	var outroOver = false;
-	var outroText = ["Game Design: Mark Abel", "Animation: Mark Abel", "Art: Stolen From Varius Artists", "Written By: Mark Abel", "Music: Stolen from various Artists", "No Dubuses Were Harmed in the Making of this Game", "Thank you for playing", "Why are you still here?", "You really don't have anything better to do?", "Ok. Ok. I know this song rules", "Does anyone else touch themselves to this song?", "Was that too much information?", "You can leave now", "Or not", "Thanks again"]
+	var outroText = ["Game Design: Mark Abel", "Animation: Mark Abel", "Written By: Mark Abel", "Art: Stolen From Varius Artists and Vecteezy", "General Music: Stolen from various Artists", "Battle Music by Nobuo Uematsu", "Thank you for playing", "Why are you still here?", "You really don't have anything better to do?", "Ok. Ok. I know this song rules", "Does anyone else touch themselves to this song?", "Was that too much information?", "You can leave now", "Or not", "Outro Music by Natalie Imbruglia", "Thanks again"]
 	$(outroText).each(function(index){
 		outroMusic.play();
 		setTimeout(function(){
@@ -149,7 +150,7 @@ var outroSequence = function(){
 //Pre-battle sequence
 var beginBattleIntro = function() {
 	var preBattleOver = false;
-	var preBattleText = "On your way to the village of Anselton a monster jumps out of the bush...";
+	var preBattleText = "On your way to the village of Anselton a monster jumps out of the bushes at you...";
 	var splitPreBattle = preBattleText.split("");
 	$(splitPreBattle).each(function(index){
 		preBattleMusic.play();
@@ -312,7 +313,7 @@ var player = {hp: 20,
 
 	//algorithm to change HP based on user and monster choices
 	function userTurn(){
-		monster.hp = Math.floor((monster.hp - (player.damage / monster.defend)) + monster.heal);
+		monster.hp = monster.hp - Math.floor(player.damage / monster.defend) + monster.heal;
 		showAction();
 		if(player.choice == 'attack'){
 			userAttack();
@@ -323,7 +324,7 @@ var player = {hp: 20,
 	};
 
 	function monsterTurn(){
-		player.hp = Math.floor((player.hp - (monster.damage / player.defend)) + player.heal);
+		player.hp = player.hp - Math.floor(monster.damage / player.defend) + player.heal;
 		if(monster.choice === 1 || monster.choice === 4 || monster.choice === 5){
 			monsterAttack();
 			mAttack.play();
@@ -351,6 +352,8 @@ var player = {hp: 20,
 		  audio.pause();
 		  var defeatAudio = new Audio('./sounds/defeat.mp3');
 			defeatAudio.play();
+			$('#container4').hide();
+			$('#container5').hide();
 			$('#container').css({'background-image': 'none'}).animate({ backgroundColor: "#000000",
 															 			  														color: "white"}, 2000);
 	    $("#battle-dialogue").html("<h1>YOU'VE BEEN DEFEATED!</h1>");
