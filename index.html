@@ -3,34 +3,20 @@
   <head>
   	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/jquery-ui-git.css">
     <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
-    <title>Monster Battle</title>
+    <title>Adventure of Dubus</title>
   </head>
   <body>
-  	<div id ="container5">
-  		<div id='dubus-container'>
-  			<img src="images/knight.png" id="outro-dubus">
-  		</div>
-  		<div id="tear-container">
-  		</div>
-  		<div id='dialogue-container'>
-  			<h1 id ="outro-dialogue"></h1>
-  		</div>
-  	</div>
-  	<div id ="container4">
-  	 <h1 id ="inn-dialogue"></h1>
-  	</div>
-  	<div id ="container3">
+  	<div id ="opening-screen">
   		<h1 id='open-dialogue'></h1>
   	</div>
-  	<div id="container2">	
+  	<div id="intro-container">	
   		<div id ='intro-player'>
   			<img src="images/knight.png">
   		</div>
-  		<h1 id = "intro-dialogue"></h1>
+  			<h1 id = "intro-dialogue"></h1>
   	</div>
-  	<div id = 'container'>
+  	<div id ='battle-container'>
       <h1 id="battle-dialogue"></h1>
-	      <!-- <h2 id=''>Would you like to...</h2> -->
 	     <div id='stat-container'>
 	     		<ul id='stat-list'>
 	     			<li id='name'>Character: </li>
@@ -49,13 +35,26 @@
         <img src="images/knight.png" id = "player">
       </div>
       <div id="monster">
-        <img src="images/skeleton.png" id = "skeleton">
+        <img src="images/skeleton.png" id = "monster-img">
       </div>
       <div id = 'userDamage'></div>
   		<div id = 'monsterDamage'></div>
   		<div id = 'userHeal'></div>
   		<div id = 'monsterHeal'></div>
     </div>
+    <div id ="inn-container">
+  	 <h1 id ="inn-dialogue"></h1>
+  	</div>
+  	<div id ="outro-container">
+  		<div id='dubus-container'>
+  			<img src="images/knight.png" id="outro-dubus">
+  		</div>
+  			<div id="tear-container">	</div>
+  		<div id='dialogue-container'>
+  			<h1 id ="outro-dialogue"></h1>
+  		</div>
+  	</div>
+
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/ui/jquery-ui-git.js"></script>
 <script language="javascript" type="text/javascript" src="js/script.js"></script>

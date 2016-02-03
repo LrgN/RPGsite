@@ -15,7 +15,7 @@ body{
 	height: 100%;
 }
 
-#container, #container2, #container3, #container4, #container5{
+#battle-container, #intro-container, #opening-screen, #inn-container, #outro-container{
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	height: 600px;
@@ -28,34 +28,34 @@ body{
 	top: 9px;
 }
 
-#container{
+#battle-container{
 	background-image: url("../images/field.jpg");
 	z-index: 2;
 	
 }
 
-#container2{
+#intro-container{
 	background-image: url("../images/castle.png");
 	z-index: 3;
 	position: absolute;
 	left: 228px;
 }
 
-#container3{
+#opening-screen{
 	background-image: url("../images/intro.png");
 	z-index: 4;
 	position: absolute;
 	left: 228px;
 }
 
-#container4{
+#inn-container{
 	background-image: url("../images/inn.jpg");
 	z-index: 1;
 	position: absolute;
 	left: 228px;
 }
 
-#container5{
+#outro-container{
 	background-color: black;
 	z-index: 0;
 	position: absolute;
@@ -188,7 +188,7 @@ body{
 	text-align:center;
 }
 
-#skeleton{
+#monster-img{
 	height: 300px;
 	width: 300px;
 }
@@ -201,6 +201,7 @@ body{
 
 #outro-dialogue{
 	font-size: 20px;
+	width: 600px;
 }
 
 #dubus-container{
