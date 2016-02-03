@@ -6,7 +6,7 @@ var hideBattleItems = function(){
 	$('#user').hide();
 }
 
-
+var battleNumber = 0;
 
 
 $(document).ready(function(){
@@ -22,7 +22,6 @@ var error = new Audio('./sounds/error.mp3');
 var introMusic = new Audio('./sounds/intro.mp3');
 var openScene = new Audio('./sounds/openscene.mp3');
 var outroMusic = new Audio('./sounds/torn.m4a')
-var battleNumber = 0;
 
 //Creates character objects
 var monster = {hp: 30,
@@ -40,7 +39,6 @@ var player = {hp: 30,
 						 clicked: false,
 						 name: "Dubus"};
 
-//function that resets stats to be used after battle
 var resetStats = function(){
 	monster = {hp: 30,
 								mp: 10,
@@ -146,7 +144,6 @@ var beginBattleIntro = function() {
 	   		  	preBattleMusic.pause();
 	      		beginBattle();
 	      		preBattleOver = true;
-	      		firstBattle = false;
 	    			}
 		   		}
 				});
@@ -167,8 +164,7 @@ var innSequence = function(){
 			$("#inn-dialogue").append(splitInnText[index]);
 			if(index + 1 === splitInnText.length){
 				$("#inn-dialogue").append("<p>Press Enter to Continue</p>");
-				if(battleNumber == 1){
-					document.addEventListener('keypress', function(e){
+				document.addEventListener('keypress', function(e){
 					var key = e.which || e.keyCode;
 						if(innOver == false){
 							if(key === 13){
@@ -178,6 +174,8 @@ var innSequence = function(){
 								resetStats();
 								preBattleMusic.pause();
 								$("#monster").html("<img src='./images/wizard.png' id='monster-img'>");
+								monster.hp = 30;
+								monster.mp = 20;
 								$("#player").css({"left" : "140px",
 																	"bottom" : "10px",
 																	"height" : "200px",
@@ -186,8 +184,7 @@ var innSequence = function(){
 								innOver = true;
 							}
 						}
-					})
-				}
+				})
 			}
 		},100 * (index + 1));
 	})
@@ -196,9 +193,9 @@ var innSequence = function(){
 //outro sequence
 var outroSequence = function(){
 	var outroOver = false;
-	var outroText = ["Game Design: Mark Abel", "Animation:    Mark Abel",
-									 "Written By: Mark Abel", "Art:          Stolen From Various Artists and Vecteezy", 
-									 "General Music: Stolen from various Artists", "Battle Music By:  Nobuo Uematsu", 
+	var outroText = ["Game Design: Mark Abel", "Animation: Mark Abel",
+									 "Written By: Mark Abel", "Art: Stolen From Various Artists and Vecteezy", 
+									 "General Music: Stolen from various Artists", "Battle Music by Nobuo Uematsu", 
 									 "Thank you for playing", "Why are you still here?", "You really don't have anything better to do?", 
 									 "You're enjoying this song, aren't you?", "All the feels", 
 									 "All your feels are belong to us", "You can leave now", "Or not", "Outro Music by Natalie Imbruglia", 
@@ -209,7 +206,7 @@ var outroSequence = function(){
 			$("#outro-dialogue").html("<h1>" + outroText[index] + "</h1>").animate({opacity: "1", color: "white"}, 5000, function(){
 			$("#outro-dialogue").animate({opacity: "0", color: "black"}, 9000)
 			});
-				if(index == outroText.length){
+				if(index + 1 == outroText.length){
 					$("#dubus-container").hide("slow");
 					$("#tear-container").hide();
 				}
@@ -344,7 +341,7 @@ var outroSequence = function(){
 		$('#magic').html("MP:   " + player.mp);
 	}
 
-	//algorithm to change HP based on user and monster choices
+	//algorithm to change HP for each character based on user and monster choices
 	function userTurn(){
 		monster.hp = monster.hp - Math.floor(player.damage / monster.defend) + monster.heal;
 		showAction();
@@ -396,44 +393,43 @@ var outroSequence = function(){
 
 		}
 		else if(monster.hp <=0){
-			battleNumber++;
 	  	var battleOver = false;
+	  	battleNumber++;
 		  $("#monster").toggle('explode');
 			$("#menu-container").hide();
 			$("#stat-container").hide();
 			fight.pause();
 			fight.currentTime = 0;
 			var victoryAudio = new Audio('./sounds/victory.mp3');
-			victoryAudio.play();	
+			victoryAudio.play();
 			if(battleNumber == 1){
 				$("#battle-dialogue").html("<h1>You Defeated the Monster!</h1><p>Press enter to continue</p>");
+		  	$("#battle-dialogue").show();
 			}else if(battleNumber == 2){
 				$("#battle-dialogue").html("<h1>You Defeated the Wizard!</h1><p>Press enter to continue</p>");
-			}
-		  $("#battle-dialogue").show();
+		  	$("#battle-dialogue").show();
+			}	
 		  $("#player").animate({left: "360px", height: "400px", width: "500px"});
 	  	$("#user").animate({left: "160px"});
 	  	document.addEventListener('keypress', function (e) {
-	    	var key = e.which || e.keyCode;
-   		if(battleNumber == 1){
-   		 	if(battleOver == false){
-   		  	if (key === 13) { 
-   		  		victoryAudio.pause();
-   		  		$("#battle-container").hide();
-      			innSequence();
-      			battleOver = true;
-    			}
-	   		}
-   		}else if(battleNumber == 2){
-   			if(battleOver == false){
-   		  	if (key === 13) { 
-   		  		victoryAudio.pause();
-   		  		$("#battle-container").hide();
-   		  		$("#inn-container").hide();
-      			outroSequence();
-      			battleOver = true;
-    			}
-	   		}
+	    var key = e.which || e.keyCode;
+	   		if(battleNumber == 1){
+	   		 	if(battleOver == false){
+	   		  	if (key === 13) { 
+	   		  		victoryAudio.pause();
+	   		  		$("#battle-container").hide();
+	      			innSequence();
+	      			battleOver = true;
+	    			}
+		   	}else if(battleNumber == 2){
+		   		if(battleOver == false){
+	   		   	victoryAudio.pause();
+	   				$("#battle-container").hide();
+	   				$("#inn-container").hide();
+	   				outroSequence();
+	   				battleOver = true;	
+		   		}
+				}
    		} 
 
 			});

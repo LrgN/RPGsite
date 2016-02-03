@@ -21,45 +21,42 @@ body{
 	height: 600px;
 	width: 800px;
 	margin: 0 auto;
-	position: relative;
+	position: absolute;
 	border-radius: 5px;
 	border: 8px inset grey;
 	overflow: hidden;
 	top: 9px;
+	left: 228px;
 }
 
 #battle-container{
 	background-image: url("../images/field.jpg");
 	z-index: 2;
-	
 }
 
 #intro-container{
 	background-image: url("../images/castle.png");
 	z-index: 3;
-	position: absolute;
-	left: 228px;
 }
 
 #opening-screen{
 	background-image: url("../images/intro.png");
 	z-index: 4;
-	position: absolute;
-	left: 228px;
 }
 
 #inn-container{
 	background-image: url("../images/inn.jpg");
 	z-index: 1;
-	position: absolute;
-	left: 228px;
+}
+
+#found-princess-container{
+	background-image: url("../images/inn.jpg");
+	z-index: 0;
 }
 
 #outro-container{
 	background-color: black;
-	z-index: 0;
-	position: absolute;
-	left: 228px;
+	z-index: -1;
 }
 
 
@@ -201,7 +198,12 @@ body{
 
 #outro-dialogue{
 	font-size: 20px;
+}
+
+#dialogue-container{
 	width: 600px;
+	text-align: center;
+	margin: 0 auto;
 }
 
 #dubus-container{
