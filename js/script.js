@@ -98,7 +98,7 @@ var introSequence = function(){
 //Inn sequence
 var innSequence = function(){
 	var innOver = false;
-	var innText = "Upon arriving in Anselton you head straight to the inn.  Once inside you immediately find your princess... the wizard and her are sharing a bottle of chianti over candlelight while holding hands.  The princess explains to you that she needs some stability in her life and that a knight just can't give that to her. You leave in defeat."
+	var innText = "Upon arriving in Anselton you head straight to the inn.  Once inside you immediately find your princess... the wizard and her are holding hands and sharing a bottle of chianti.  The princess explains to you that she needs some stability in her life and that a knight just can't give that to her. You leave in defeat."
 	var splitInnText = innText.split("");
 	$(splitInnText).each(function(index){
 		preBattleMusic.play();
@@ -368,6 +368,7 @@ var player = {hp: 20,
 			var victoryAudio = new Audio('./sounds/victory.mp3');
 			victoryAudio.play();	
 		  $("#battle-dialogue").html("<h1>You Defeated the Monster!</h1>");
+		  $("#battle-dialogue").html("<p> Press enter to continue </p>");
 		  $("#battle-dialogue").show();
 		  $("#player").animate({left: "360px", height: "400px", width: "500px"});
 	  	$("#user").animate({left: "160px"});
