@@ -67,7 +67,7 @@ var beginBattle = function(){
 										 "left" : "-50px",
 										 "bottom" : "-17px"});
 		$('#user').css({"left" : "55px",
-										"bottom" : "-15px"})
+										"bottom" : "-15px"});
 		$('#monster').css({"bottom" : "60px"});
 		resetStats();
 		$('#battle-container').css("z-index", "5");
@@ -89,7 +89,7 @@ var beginBattle = function(){
 
 //attempting a function to switch scenes, cuz I'm a bitch
 
-var makeTextType = function(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle){
+var playScene = function(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle){
 	var splitText = text.split("");
 	music.currentTime = 0;
 	music.play();
@@ -129,7 +129,7 @@ var openingScene = function(){
 	var text = "THE ADVENTURE OF DUBUS";
 	var nextScene = introSequence;
 	var battle = false;
-	makeTextType(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle)
+	playScene(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle)
 }
 
 //Intro sequence
@@ -141,7 +141,7 @@ var introSequence = function(){
 	text = "You. The lone knight Sir Dubus have been aimlessly wandering hoping for clues on your missing princess... A passing peasant tells you that he saw a wizard and a princess heading towards Anselton.  Could this be your princess?";
 	nextScene = beginBattleIntro;
 	battle = false;
-	makeTextType(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
+	playScene(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
 }
 
 //Pre-battle sequence
@@ -153,7 +153,7 @@ var beginBattleIntro = function() {
 	text = "On your way to the village of Anselton a monster jumps out of the bushes at you...";
 	nextScene = beginBattle;
 	battle = true;
-	makeTextType(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
+	playScene(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
 }
 
 //Inn sequence
@@ -165,7 +165,7 @@ var innSequence = function(){
 	text = "Upon arriving in Anselton you head straight to the inn.  Once inside you immediately find your princess... You drag the wizard outside and challenge him to a duel";
 	nextScene = foundPrincess;
 	battle = true;
-	makeTextType(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
+	playScene(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
 	
 }
 
