@@ -4,8 +4,8 @@ Browser based text-based RPG with subtle animations
 
 Screenshots
 
-![alt tag](https://raw.github.com/abelmark/RPGsite/images/screenshot1.png)
-![alt tag](https://raw.github.com/abelmark/RPGsite/images/screenshot2.png)
+!(https://raw.github.com/abelmark/RPGsite/images/screenshot1.png)
+!(https://raw.github.com/abelmark/RPGsite/images/screenshot2.png)
 
 
   
