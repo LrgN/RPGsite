@@ -12,19 +12,19 @@ A short, but sweet browser based text-based RPG with subtle animations
 
 **Features**
 
-Multiple scenes
-Battle sequences
+*Multiple scenes
+*Battle sequences
 
 **Credits**
 
-jQuery
-jQuery UI
-PressStart2P Font (8-bit)
+*jQuery
+*jQuery UI
+*PressStart2P Font (8-bit)
 
 **Known Issues**
 
-Strange animations
-You can rapid click through battle
+*Strange animations
+*You can rapid click through battle
 
 **Disclaimer**
 
