@@ -10,21 +10,22 @@ Screenshots
 
   
 
-Features
+**Features**
 
 Multiple scenes
 Battle sequences
 
+**Credits**
 
 jQuery
 jQuery UI
 PressStart2P Font (8-bit)
 
-Known Issues
+**Known Issues**
 
 Strange animations
 You can rapid click through battle
 
-Disclaimer
+**Disclaimer**
 
 I love Natalie Imbruglia
