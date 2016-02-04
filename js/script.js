@@ -1,15 +1,16 @@
-//hides content for later use
-$('#menu-container').hide();
-$('#stat-container').hide();
-$('#monster').hide();
-$('#user').hide();
-
-
-
 $(document).ready(function(){
 
+//hides content for later use
+var hideBattleItems = function(){
+	$('#menu-container').hide();
+	$('#stat-container').hide();
+	$('#monster').hide();
+	$('#user').hide();
+}
+
+
 //creates audio variables for music/sound
-var audio = new Audio('./sounds/fight.mp3');
+var fight = new Audio('./sounds/fight.mp3');
 var hitAudio = new Audio('./sounds/hit.wav');
 var healAudio = new Audio('./sounds/cure.wav');
 var killAudio = new Audio('./sounds/kill.wav');
@@ -19,13 +20,61 @@ var error = new Audio('./sounds/error.mp3');
 var introMusic = new Audio('./sounds/intro.mp3');
 var openScene = new Audio('./sounds/openscene.mp3');
 var outroMusic = new Audio('./sounds/torn.m4a')
+var battleNumber = 0;
+
+//Creates character objects
+var monster = {hp: 30,
+							mp: 10,
+							damage: 0,
+							defend: 0,
+							heal: 0,
+							choice: 0};
+var player = {hp: 30,
+						 mp: 20,
+						 damage: 0,
+						 defend: 0,
+						 heal: 0,
+						 choice: "",
+						 clicked: false,
+						 name: "Dubus"};
+
+//function that resets stats to be used after battle
+var resetStats = function(){
+	monster = {hp: 30,
+								mp: 10,
+								damage: 0,
+								defend: 0,
+								heal: 0,
+								choice: 0};
+	player = {hp: 30,
+							 mp: 20,
+							 damage: 0,
+							 defend: 0,
+							 heal: 0,
+							 choice: "",
+							 clicked: false,
+							 name: "Dubus"};
+}
 
 
-
-
-
-//Populates the container div for battle, starts battle audio
+//Populates the container divs for battle, starts battle audio
 var beginBattle = function(){
+	if(battleNumber == 1){
+		$('#monster').html("<img src='./images/wizard.png' id='monster-img'>");
+		$('#battle-container').css("background-image", "url('./images/inn.jpg')");
+		$('#player').css({"height" : "250px",
+										 "width" : "300px",
+										 "left" : "-50px",
+										 "bottom" : "-17px"});
+		$('#user').css({"left" : "55px",
+										"bottom" : "-15px"});
+		$('#monster').css({"bottom" : "60px"});
+		resetStats();
+		$('#battle-container').css("z-index", "5");
+		$('#inn-container').hide();
+		$('#battle-container').show();
+
+	}
 	$('#menu-container').show();
 	$('#user').show();
 	$('#monster').show();
@@ -34,31 +83,120 @@ var beginBattle = function(){
 	appendStats();
 	$('#monster').animate({	right: "0px", bottom: "-10px"});
 	$('#user').animate({	left: "-40px", bottom: "10px"});
-	audio.play();
+	fight.play();
 }
 
 
-//Opening Scene
-var openingScene = function(){
-	openOver = false;
-	var openText = "THE ADVENTURE OF DUBUS";
-	var splitOpenText = openText.split("");
-	$(splitOpenText).each(function(index){
-		openScene.play();
-		setTimeout(function(){
-			$("#open-dialogue").append(splitOpenText[index]);
-			if(index + 1 === splitOpenText.length){
-				$("#open-dialogue").append("<p>Press Enter to Begin</p>");
+//attempting a function to switch scenes, cuz I'm a bitch
 
-				$("#open-dialogue");
+var playScene = function(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle){
+	var splitText = text.split("");
+	music.currentTime = 0;
+	music.play();
+	$(splitText).each(function(index){
+		setTimeout(function(){
+			$(whichDialogue).append(splitText[index]);
+			if(index + 1 === splitText.length){
+				$(whichDialogue).append("<p>Press Enter to Begin</p>");
 				document.addEventListener('keypress', function(e){
 					var key = e.which || e.keyCode;
-					if(openOver == false){
+					if(sceneOver == false){
 						if(key === 13){
-							openScene.pause();
-							introSequence();
-							$("#container3").hide();
-							openOver = true;
+							if(battle){
+								music.pause();
+								beginBattle();
+								sceneOver = true;
+							}else{
+								music.pause();
+								nextScene();
+								$(thisScene).hide();
+								sceneOver = true;
+							}
+						}
+					}
+				})
+			}
+		}, 75 * (index + 1));
+	})
+}
+
+//Opening Scene
+var openingScene = function(){
+	var thisScene = ("#opening-screen");
+	var whichDialogue = ("#opening-dialogue");
+	var music = openScene;
+	var sceneOver = false;
+	var text = "THE ADVENTURE OF DUBUS";
+	var nextScene = introSequence;
+	var battle = false;
+	playScene(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle)
+}
+
+//Intro sequence
+var introSequence = function(){
+	thisScene = ("#intro-container");
+	whichDialogue = ("#intro-dialogue");
+	music = introMusic;
+	sceneOver = false;
+	text = "You. The lone knight Sir Dubus have been aimlessly wandering hoping for clues on your missing princess... A passing peasant tells you that he saw a wizard and a princess heading towards Anselton.  Could this be your princess?";
+	nextScene = beginBattleIntro;
+	battle = false;
+	playScene(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
+}
+
+//Pre-battle sequence
+var beginBattleIntro = function() {
+	thisScene = ("#battle-container");
+	whichDialogue = ("#battle-dialogue");
+	music = preBattleMusic;
+	sceneOver = false;
+	text = "On your way to the village of Anselton a monster jumps out of the bushes at you...";
+	nextScene = beginBattle;
+	battle = true;
+	playScene(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
+}
+
+//Inn sequence
+var innSequence = function(){
+	thisScene = ("#inn-container");
+	whichDialogue = ("#inn-dialogue");
+	music = preBattleMusic;
+	sceneOver = false;
+	text = "Upon arriving in Anselton you head straight to the inn.  Once inside you immediately find your princess... You drag the wizard outside and challenge him to a duel";
+	nextScene = foundPrincess;
+	battle = true;
+	playScene(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
+	
+}
+
+//found princess sequence
+var foundPrincess = function(){
+	foundPrincessOver = false;
+	var openText = "You rush up to the princess, and you realize she is crying.  She informs you that she ran off with the wizard and that she is looking for some stability in her life, which a knight can't give her. She pulls a vial of poison out of her pocket and swallows it";
+	var splitOpenText = openText.split("");
+	$(splitOpenText).each(function(index){
+		preBattleMusic.currentTime = 0;
+		preBattleMusic.play();
+		setTimeout(function(){
+			$("#found-princess-dialogue").append(splitOpenText[index]);
+			if(index + 1 === splitOpenText.length){
+				$("#found-princess-dialogue").append("<p>Press Enter to Begin</p>");
+				$("#found-princess-dialogue");
+				document.addEventListener('keypress', function(e){
+					var key = e.which || e.keyCode;
+					if(foundPrincessOver == false){
+						if(key === 13){
+							$("#princess").toggle('explode');
+							mAttack.play();
+							setTimeout(function(){
+								preBattleMusic.pause();
+								outroSequence();
+								$("#inn-container").hide();
+								$("#found-princess-container").hide();
+								$("#dubus2").animate({opacity: "0"});
+								foundPrincessOver = true;
+							},3000)
+
 						}
 					}
 				})
@@ -68,71 +206,23 @@ var openingScene = function(){
 }
 
 
-//Intro sequence
-var introSequence = function(){
-	var preIntroOver = false;
-	var introText = "You. The lone knight Sir Dubus have been aimlessly wandering hoping for clues on your missing princess... In the Lands of Lay you receive a lead that your princess may have been spotted with a mysterious wizard. They were last spotted in the village of Anselton.  Without hesitation you embark on your journey..."
-	var splitIntroText = introText.split("");
-	$(splitIntroText).each(function(index){
-		introMusic.play();
-		setTimeout(function(){
-			$("#intro-dialogue").append(splitIntroText[index]);
-			if(index + 1 === splitIntroText.length){
-				$("#intro-dialogue").append("<p>Press Enter to Continue</p>");
-				document.addEventListener('keypress', function(e){
-					var key = e.which || e.keyCode;
-						if(preIntroOver == false){
-							if(key === 13){
-								introMusic.pause();
-								beginBattleIntro();
-								$("#container2").hide();
-								preIntroOver = true;
-							}
-						}
-				})
-			}
-		},100 * (index + 1));
-	})
-}
-
-//Inn sequence
-var innSequence = function(){
-	var innOver = false;
-	var innText = "Upon arriving in Anselton you head straight to the inn.  Once inside you immediately find your princess... the wizard and her are holding hands and sharing a bottle of chianti.  The princess explains to you that she needs some stability in her life and that a knight just can't give that to her. You leave in defeat."
-	var splitInnText = innText.split("");
-	$(splitInnText).each(function(index){
-		preBattleMusic.play();
-		setTimeout(function(){
-			$("#inn-dialogue").append(splitInnText[index]);
-			if(index + 1 === splitInnText.length){
-				$("#inn-dialogue").append("<p>Press Enter to Continue</p>");
-				document.addEventListener('keypress', function(e){
-					var key = e.which || e.keyCode;
-						if(innOver == false){
-							if(key === 13){
-								preBattleMusic.pause();
-								outroSequence();
-								$("#container4").hide().animate();
-								innOver = true;
-							}
-						}
-				})
-			}
-		},100 * (index + 1));
-	})
-}
-
 //outro sequence
 var outroSequence = function(){
 	var outroOver = false;
-	var outroText = ["Game Design: Mark Abel", "Animation: Mark Abel", "Art: Stolen From Varius Artists", "Written By: Mark Abel", "Music: Stolen from various Artists", "No Dubuses Were Harmed in the Making of this Game", "Thank you for playing", "Why are you still here?", "You really don't have anything better to do?", "Ok. Ok. I know this song rules", "Does anyone else touch themselves to this song?", "Was that too much information?", "You can leave now", "Or not", "Thanks again"]
+	var outroText = ["Game Design: Mark Abel", "Animation:      Mark Abel",
+									 "Written By: Mark Abel", "Art:          Stolen From Various Artists and Vecteezy", 
+									 "General Music: Stolen from various Artists", "Battle Music By:  Nobuo Uematsu", 
+									 "Thank you for playing", "Why are you still here?", "You really don't have anything better to do?", 
+									 "You're enjoying this song, aren't you?", "All the feels", 
+									 "All your feels are belong to us", "You can leave now", "Or not", "Outro Music by Natalie Imbruglia", 
+									 "Thanks again"]
 	$(outroText).each(function(index){
 		outroMusic.play();
 		setTimeout(function(){
 			$("#outro-dialogue").html("<h1>" + outroText[index] + "</h1>").animate({opacity: "1", color: "white"}, 5000, function(){
 			$("#outro-dialogue").animate({opacity: "0", color: "black"}, 9000)
 			});
-				if(index + 1 == outroText.length){
+				if(index == outroText.length){
 					$("#dubus-container").hide("slow");
 					$("#tear-container").hide();
 				}
@@ -145,52 +235,7 @@ var outroSequence = function(){
 			
 }
 
-
-//Pre-battle sequence
-var beginBattleIntro = function() {
-	var preBattleOver = false;
-	var preBattleText = "On your way to the village of Anselton a monster jumps out of the bush...";
-	var splitPreBattle = preBattleText.split("");
-	$(splitPreBattle).each(function(index){
-		preBattleMusic.play();
-		setTimeout( function(){
-			$("#battle-dialogue").append(splitPreBattle[index]);
-			if(index + 1 === splitPreBattle.length){
-				$("#battle-dialogue").append("<p>Press Enter to Continue</p>");	
-
-				document.addEventListener('keypress', function (e) {
-	    	var key = e.which || e.keyCode;
-	   		  if(preBattleOver == false){
-	   		  	if (key === 13) { 
-	   		  	preBattleMusic.pause();
-	      		beginBattle();
-	      		preBattleOver = true;
-	    			}
-		   		}
-
-				});
-			}
-		}, 100 * (index + 1));
-	})
-}
-
-
-//Creates character objects
-var monster = {hp: 30,
-								mp: 10,
-								damage: 0,
-								defend: 0,
-								heal: 0,
-								choice: 0};
-var player = {hp: 20,
-							 mp: 20,
-							 damage: 0,
-							 defend: 0,
-							 heal: 0,
-							 choice: "",
-							 clicked: false,
-							 name: "Dubus"};
-	
+//Damage taken and healing animations	
 	var showAction = function(){
 		if(monster.damage > 0){
 			$('#userDamage').html("<h1>" + Math.floor(monster.damage/player.defend) + "</h1>").animate({bottom: "+=60px", opacity: "0", color: "red"}, 1000, function(){
@@ -234,15 +279,17 @@ var player = {hp: 20,
 
 	//function to run through the monsters roll
 	function monsterChoice() {
-		//checks to see if monster has available MP for heal if so it runs
+		//checks to see if monster has available MP for heal if not it runs a roll without heal as an option
 	  if(monster.mp == 0){
 	    monster.choice = 1 + (Math.floor(Math.random() * 2));
+	    	//monster attacks
 	      switch (monster.choice) {
 	      case 1:
 	        monster.damage = 1 + (Math.floor(Math.random() * 5));
 	        monster.defend = 1;
 	        monster.heal = 0;
 	        break;
+	      //monster defends
 	      case 2:
 	        monster.damage = 0;
 	        monster.defend = 2;
@@ -284,7 +331,7 @@ var player = {hp: 20,
 	function userChoice() {
 		switch (player.choice) {
 			case "attack":
-				player.damage = 1 + (Math.floor(Math.random() * 5));
+				player.damage = 1 + (Math.floor(Math.random() * 10));
 				player.defend = 1;
 				player.heal = 0;
 				break;
@@ -303,7 +350,7 @@ var player = {hp: 20,
 
 	};
 
-	//append stats function
+	//appends stats to the stat menu on the DOM
 	var appendStats = function(){
 		$('#name').html("Character:" + player.name)
 		$('#health').html("HP: " + player.hp);
@@ -312,7 +359,7 @@ var player = {hp: 20,
 
 	//algorithm to change HP based on user and monster choices
 	function userTurn(){
-		monster.hp = Math.floor((monster.hp - (player.damage / monster.defend)) + monster.heal);
+		monster.hp = monster.hp - Math.floor(player.damage / monster.defend) + monster.heal;
 		showAction();
 		if(player.choice == 'attack'){
 			userAttack();
@@ -323,7 +370,7 @@ var player = {hp: 20,
 	};
 
 	function monsterTurn(){
-		player.hp = Math.floor((player.hp - (monster.damage / player.defend)) + player.heal);
+		player.hp = player.hp - Math.floor(monster.damage / player.defend) + player.heal;
 		if(monster.choice === 1 || monster.choice === 4 || monster.choice === 5){
 			monsterAttack();
 			mAttack.play();
@@ -342,50 +389,71 @@ var player = {hp: 20,
 	  }
 	}
 
-	//Determines if game is over then begins endgame animation
+	//Determines if either player's HP is below zero if so begins endgame animation
 	function endGame() {
 		if(player.hp <= 0){
 			$("#user").toggle("explode");
 			$('#menu-container').hide();
 		  $("#stat-container").hide();
-		  audio.pause();
+		  fight.pause();
 		  var defeatAudio = new Audio('./sounds/defeat.mp3');
 			defeatAudio.play();
-			$('#container').css({'background-image': 'none'}).animate({ backgroundColor: "#000000",
+			$('#inn-container').hide();
+			$('#outro-container').hide();
+			$('#battle-container').css({'background-image': 'none'}).animate({ backgroundColor: "#000000",
 															 			  														color: "white"}, 2000);
 	    $("#battle-dialogue").html("<h1>YOU'VE BEEN DEFEATED!</h1>");
 	    $("#battle-dialogue").show();
-	    $("#skeleton").animate({right: "200px", height: "400px", width: "400px"});
+	    $("#monster-img").animate({right: "200px", height: "400px", width: "400px"});
 	    $("#monster").animate({right: "200px"});
 
 		}
 		else if(monster.hp <=0){
+			battleNumber++;
 	  	var battleOver = false;
 		  $("#monster").toggle('explode');
 			$("#menu-container").hide();
 			$("#stat-container").hide();
-			audio.pause();
+			fight.pause();
+			fight.currentTime = 0;
 			var victoryAudio = new Audio('./sounds/victory.mp3');
 			victoryAudio.play();	
-		  $("#battle-dialogue").html("<h1>You Defeated the Monster!</h1>");
-		  $("#battle-dialogue").html("<p> Press enter to continue </p>");
+			if(battleNumber == 1){
+				$("#battle-dialogue").html("<h1>You Defeated the Monster!</h1><p>Press enter to continue</p>");
+			}else if(battleNumber == 2){
+				$("#battle-dialogue").html("<h1>You Defeated the Wizard!</h1><p>Press enter to continue</p>");
+			}
 		  $("#battle-dialogue").show();
 		  $("#player").animate({left: "360px", height: "400px", width: "500px"});
 	  	$("#user").animate({left: "160px"});
 	  	document.addEventListener('keypress', function (e) {
 	    	var key = e.which || e.keyCode;
-   		  if(battleOver == false){
+   		if(battleNumber == 1){
+   		 	if(battleOver == false){
    		  	if (key === 13) { 
    		  		victoryAudio.pause();
-   		  		$("#container").hide();
+   		  		$("#battle-container").hide();
       			innSequence();
       			battleOver = true;
     			}
 	   		}
+   		}else if(battleNumber == 2){
+   			if(battleOver == false){
+   		  	if (key === 13) { 
+   		  		victoryAudio.pause();
+   		  		$("#battle-container").hide();
+   		  		$("#inn-container").hide();
+      			foundPrincess();
+      			battleOver = true;
+    			}
+	   		}
+   		} 
+
 			});
 	  }
 	};
 
+	//Runs during battle.  These are all of the functions needed for battle to work
 	var runGame = function(){
 		player.clicked = true;
 		if(player.clicked == true){
@@ -425,7 +493,7 @@ var player = {hp: 20,
 	});
 
 //Begins intro sequences
-
+hideBattleItems();
 openingScene();
 
 })

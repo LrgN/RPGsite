@@ -10,56 +10,54 @@
 body{
 	margin:  auto;
 	text-align: center;
-	background: linear-gradient(#40AB3B, #FFFFFF);
+	background: black;
 	background-repeat: no-repeat;
 	height: 100%;
 }
 
-#container, #container2, #container3, #container4, #container5{
+#battle-container, #intro-container, #opening-screen, #inn-container, #outro-container, #found-princess-container{
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	height: 600px;
 	width: 800px;
 	margin: 0 auto;
-	position: relative;
+	position: absolute;
 	border-radius: 5px;
 	border: 8px inset grey;
 	overflow: hidden;
 	top: 9px;
+	left: 228px;
 }
 
-#container{
+#battle-container{
 	background-image: url("../images/field.jpg");
 	z-index: 2;
-	
 }
 
-#container2{
+#intro-container{
 	background-image: url("../images/castle.png");
 	z-index: 3;
-	position: absolute;
-	left: 228px;
 }
 
-#container3{
+#opening-screen{
 	background-image: url("../images/intro.png");
 	z-index: 4;
-	position: absolute;
-	left: 228px;
 }
 
-#container4{
+#inn-container{
 	background-image: url("../images/inn.jpg");
 	z-index: 1;
-	position: absolute;
-	left: 228px;
 }
 
-#container5{
-	background-color: black;
+#found-princess-container{
+	background-image: url("../images/inn.jpg");
+	text-align: center;
 	z-index: 0;
-	position: absolute;
-	left: 228px;
+}
+
+#outro-container{
+	background-color: black;
+	z-index: -1;
 }
 
 
@@ -139,12 +137,11 @@ body{
 	margin-left: -15px;
 }
 
-#battle-dialogue, #intro-dialogue, #open-dialogue{
-	border-radius: 5px;
+#battle-dialogue, #intro-dialogue, #open-dialogue, #found-princess-dialogue{
 	width:100%;
 }
 
-#battle-dialogue p, #intro-dialogue p, #open-dialogue p, #inn-dialogue p{
+#battle-dialogue p, #intro-dialogue p, #opening-dialogue p, #inn-dialogue p, #found-princess-dialogue p{
 	font-size: 0.7em;
 }
 
@@ -164,9 +161,27 @@ body{
 	transform: scale(-1, 1);
 }
 
-#player{
+#player{ 
 	height: 200px;
 	width: 250px;
+}
+
+#dubus2{ 
+	height: 260px;
+	width: 325px;
+}
+
+#princess{
+	height: 200px;
+	width: 150px;
+}
+
+#together{
+	width: 550px;
+	text-align: center;
+	bottom: 52px;
+	left: 150px;
+	position: absolute;
 }
 
 #intro-dialogue{
@@ -188,7 +203,7 @@ body{
 	text-align:center;
 }
 
-#skeleton{
+#monster-img{
 	height: 300px;
 	width: 300px;
 }
@@ -201,6 +216,12 @@ body{
 
 #outro-dialogue{
 	font-size: 26px;
+}
+
+#dialogue-container{
+	width: 600px;
+	text-align: center;
+	margin: 0 auto;
 }
 
 #dubus-container{
@@ -225,4 +246,8 @@ body{
 #tear-container img{
 	height: 50px;
 	width: 50px;
+}
+
+#found-princes-dialogue h1{
+	font-size: .4em;
 }
