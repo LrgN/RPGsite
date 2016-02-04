@@ -475,22 +475,53 @@ var outroSequence = function(){
 	}
 
 	//Event listener for user actions
-	$('#attack').click(function() {
+	var resetClickListeners = function(){
+		$('#attack').on("click", function() {
+		$('#attack').off('click');
+		$('#defend').off('click');
+		$('#heal').off('click');
 		player.choice = "attack";
-		runGame();		
-	});
-	$('#defend').click(function() {
-		player.choice = "defend";
 		runGame();
-	});
-	$('#heal').click(function() {
-	  if(player.mp == 0){
-	    error.play();
-	  }else{
-			player.choice = "heal"; 
+		setTimeout(function(){
+			resetClickListeners();
+		},1500);		
+		});
+		$('#defend').on("click", function() {
+			$('#attack').off('click');
+			$('#defend').off('click');
+			$('#heal').off('click');
+			player.choice = "defend";
 			runGame();
-		};
+			setTimeout(function(){
+				resetClickListeners();
+			},1500)
+		});
+		$('#heal').on("click", function() {
+			$('#attack').off('click');
+			$('#defend').off('click');
+			$('#heal').off('click');
+		  if(player.mp == 0){
+		    error.play();
+		  }else{
+				player.choice = "heal"; 
+				runGame();
+			setTimeout(function(){
+				resetClickListeners();
+			},1500)
+			};
+		});
+	}
+
+	$('#attack').on("click", function() {
+		resetClickListeners();		
 	});
+	$('#defend').on("click", function() {
+		resetClickListeners();
+	});
+	$('#heal').on("click", function() {
+		resetClickListeners();
+	});
+
 
 //Begins intro sequences
 hideBattleItems();
