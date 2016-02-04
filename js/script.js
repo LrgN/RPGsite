@@ -59,6 +59,22 @@ var resetStats = function(){
 
 //Populates the container divs for battle, starts battle audio
 var beginBattle = function(){
+	if(battleNumber == 1){
+		$('#monster').html("<img src='./images/wizard.png' id='monster-img'>");
+		$('#battle-container').css("background-image", "url('./images/inn.jpg')");
+		$('#player').css({"height" : "250px",
+										 "width" : "300px",
+										 "left" : "-50px",
+										 "bottom" : "-17px"});
+		$('#user').css({"left" : "55px",
+										"bottom" : "-15px"})
+		$('#monster').css({"bottom" : "47px"});
+		resetStats();
+		$('#battle-container').css("z-index", "5");
+		$('#inn-container').hide();
+		$('#battle-container').show();
+
+	}
 	$('#menu-container').show();
 	$('#user').show();
 	$('#monster').show();
@@ -73,132 +89,84 @@ var beginBattle = function(){
 
 //attempting a function to switch scenes, cuz I'm a bitch
 
-var makeTextType = function(whichScene, text, sceneOver, nextScene, music){
+var makeTextType = function(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle){
 	var splitText = text.split("");
+	music.currentTime = 0;
 	music.play();
 	$(splitText).each(function(index){
 		setTimeout(function(){
-			$("#open-dialogue").append(splitText[index]);
+			$(whichDialogue).append(splitText[index]);
 			if(index + 1 === splitText.length){
-				$("#open-dialogue").append("<p>Press Enter to Begin</p>");
+				$(whichDialogue).append("<p>Press Enter to Begin</p>");
 				document.addEventListener('keypress', function(e){
 					var key = e.which || e.keyCode;
 					if(sceneOver == false){
 						if(key === 13){
-							music.pause();
-							nextScene();
-							$(whichScene).hide();
-							sceneOver = true;
+							if(battle){
+								music.pause();
+								beginBattle();
+								sceneOver = true;
+							}else{
+								music.pause();
+								nextScene();
+								$(thisScene).hide();
+								sceneOver = true;
+							}
 						}
 					}
 				})
 			}
-		}, 100 * (index + 1));
+		}, 75 * (index + 1));
 	})
 }
 
 //Opening Scene
 var openingScene = function(){
-	var container = ("#opening-screen");
+	var thisScene = ("#opening-screen");
+	var whichDialogue = ("#opening-dialogue");
 	var music = openScene;
-	openOver = false;
-	var openText = "THE ADVENTURE OF DUBUS";
+	var sceneOver = false;
+	var text = "THE ADVENTURE OF DUBUS";
 	var nextScene = introSequence;
-	makeTextType(container, openText, openOver, nextScene, music)
+	var battle = false;
+	makeTextType(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle)
 }
 
 //Intro sequence
 var introSequence = function(){
-	var container = ("#intro-container");
-	var music = introMusic;
-	var preIntroOver = false;
-	var introText = "You. The lone knight Sir Dubus have been aimlessly wandering hoping for clues on your missing princess... A passing peasant tells you that he saw a wizard and a princess heading towards Anselton.  Could this be your princess?";
-	var splitIntroText = introText.split("");
-	$(splitIntroText).each(function(index){
-		introMusic.play();
-		setTimeout(function(){
-			$("#intro-dialogue").append(splitIntroText[index]);
-			if(index + 1 === splitIntroText.length){
-				$("#intro-dialogue").append("<p>Press Enter to Continue</p>");
-				document.addEventListener('keypress', function(e){
-					var key = e.which || e.keyCode;
-						if(preIntroOver == false){
-							if(key === 13){
-								introMusic.pause();
-								beginBattleIntro();
-								$("#intro-container").hide();
-								preIntroOver = true;
-							}
-						}
-				})
-			}
-		},75 * (index + 1));
-	})
+	thisScene = ("#intro-container");
+	whichDialogue = ("#intro-dialogue");
+	music = introMusic;
+	sceneOver = false;
+	text = "You. The lone knight Sir Dubus have been aimlessly wandering hoping for clues on your missing princess... A passing peasant tells you that he saw a wizard and a princess heading towards Anselton.  Could this be your princess?";
+	nextScene = beginBattleIntro;
+	battle = false;
+	makeTextType(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
 }
 
 //Pre-battle sequence
 var beginBattleIntro = function() {
-	var preBattleOver = false;
-	var preBattleText = "On your way to the village of Anselton a monster jumps out of the bushes at you...";
-	var splitPreBattle = preBattleText.split("");
-	$(splitPreBattle).each(function(index){
-		preBattleMusic.play();
-		setTimeout( function(){
-			$("#battle-dialogue").append(splitPreBattle[index]);
-			if(index + 1 === splitPreBattle.length){
-				$("#battle-dialogue").append("<p>Press Enter to Continue</p>");	
-				document.addEventListener('keypress', function (e) {
-	    	var key = e.which || e.keyCode;
-	   		  if(preBattleOver == false){
-	   		  	if (key === 13) { 
-	   		  	preBattleMusic.pause();
-	      		beginBattle();
-	      		preBattleOver = true;
-	      		firstBattle = false;
-	    			}
-		   		}
-				});
-			}
-		}, 100 * (index + 1));
-	})
+	thisScene = ("#battle-container");
+	whichDialogue = ("#battle-dialogue");
+	music = preBattleMusic;
+	sceneOver = false;
+	text = "On your way to the village of Anselton a monster jumps out of the bushes at you...";
+	nextScene = beginBattle;
+	battle = true;
+	makeTextType(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
 }
 
 //Inn sequence
 var innSequence = function(){
-	var innOver = false;
-	var innText = "Upon arriving in Anselton you head straight to the inn.  Once inside you immediately find your princess... You drag the wizard outside and challenge him to a duel";
-	var splitInnText = innText.split("");
-	$(splitInnText).each(function(index){
-		preBattleMusic.currentTime = 0;
-		preBattleMusic.play();
-		setTimeout(function(){
-			$("#inn-dialogue").append(splitInnText[index]);
-			if(index + 1 === splitInnText.length){
-				$("#inn-dialogue").append("<p>Press Enter to Continue</p>");
-				if(battleNumber == 1){
-					document.addEventListener('keypress', function(e){
-					var key = e.which || e.keyCode;
-						if(innOver == false){
-							if(key === 13){
-								$('#battle-container').css('background-image', 'url("./images/inn.jpg")');
-								$('#battle-container').show();
-								$('#battle-container').css('z-index', '5');
-								resetStats();
-								preBattleMusic.pause();
-								$("#monster").html("<img src='./images/wizard.png' id='monster-img'>");
-								$("#player").css({"left" : "140px",
-																	"bottom" : "10px",
-																	"height" : "200px",
-																	"width" : "250px"});
-								beginBattle();
-								innOver = true;
-							}
-						}
-					})
-				}
-			}
-		},100 * (index + 1));
-	})
+	thisScene = ("#inn-container");
+	whichDialogue = ("#inn-dialogue");
+	music = preBattleMusic;
+	sceneOver = false;
+	text = "Upon arriving in Anselton you head straight to the inn.  Once inside you immediately find your princess... You drag the wizard outside and challenge him to a duel";
+	nextScene = foundPrincess;
+	battle = true;
+	makeTextType(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle);
+	
 }
 
 //found princess sequence
@@ -219,6 +187,7 @@ var foundPrincess = function(){
 					if(foundPrincessOver == false){
 						if(key === 13){
 							$("#princess").toggle('explode');
+							mAttack.play();
 							setTimeout(function(){
 								preBattleMusic.pause();
 								outroSequence();

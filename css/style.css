@@ -141,7 +141,7 @@ body{
 	width:100%;
 }
 
-#battle-dialogue p, #intro-dialogue p, #open-dialogue p, #inn-dialogue p, #found-princess-dialogue p{
+#battle-dialogue p, #intro-dialogue p, #opening-dialogue p, #inn-dialogue p, #found-princess-dialogue p{
 	font-size: 0.7em;
 }
 
@@ -161,9 +161,14 @@ body{
 	transform: scale(-1, 1);
 }
 
-#player, #dubus2{ 
+#player{ 
 	height: 200px;
 	width: 250px;
+}
+
+#dubus2{ 
+	height: 260px;
+	width: 325px;
 }
 
 #princess{
