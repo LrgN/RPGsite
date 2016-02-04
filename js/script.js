@@ -68,7 +68,7 @@ var beginBattle = function(){
 										 "bottom" : "-17px"});
 		$('#user').css({"left" : "55px",
 										"bottom" : "-15px"})
-		$('#monster').css({"bottom" : "47px"});
+		$('#monster').css({"bottom" : "60px"});
 		resetStats();
 		$('#battle-container').css("z-index", "5");
 		$('#inn-container').hide();

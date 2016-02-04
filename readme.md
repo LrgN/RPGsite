@@ -20,6 +20,9 @@ A short, but sweet browser based text-based RPG with subtle animations
 * jQuery 1
 * jQuery UI 2
 * PressStart2P Font (8-bit) 3
+* Vecteezy 4
+* Nobuo Uematsu 5
+* Various other artists 6
 
 **Known Issues**
 
