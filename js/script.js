@@ -68,7 +68,6 @@ var beginBattle = function(){
 										 "bottom" : "-17px"});
 		$('#user').css({"left" : "55px",
 										"bottom" : "-15px"});
-		$('#monster').css({"bottom" : "60px"});
 		resetStats();
 		$('#battle-container').css("z-index", "5");
 		$('#inn-container').hide();
@@ -81,6 +80,9 @@ var beginBattle = function(){
 	$('#battle-dialogue').hide();
 	$('#stat-container').show().animate();
 	appendStats();
+	if(battleNumber == 1){
+		$('#monster').animate({	right: "0px", bottom: "60px"});
+	}
 	$('#monster').animate({	right: "0px", bottom: "-10px"});
 	$('#user').animate({	left: "-40px", bottom: "10px"});
 	fight.play();
@@ -475,53 +477,22 @@ var outroSequence = function(){
 	}
 
 	//Event listener for user actions
-	var resetClickListeners = function(){
-		$('#attack').on("click", function() {
-		$('#attack').off('click');
-		$('#defend').off('click');
-		$('#heal').off('click');
+	$('#attack').click(function() {
 		player.choice = "attack";
+		runGame();		
+	});
+	$('#defend').click(function() {
+		player.choice = "defend";
 		runGame();
-		setTimeout(function(){
-			resetClickListeners();
-		},1500);		
-		});
-		$('#defend').on("click", function() {
-			$('#attack').off('click');
-			$('#defend').off('click');
-			$('#heal').off('click');
-			player.choice = "defend";
+	});
+	$('#heal').click(function() {
+	  if(player.mp == 0){
+	    error.play();
+	  }else{
+			player.choice = "heal"; 
 			runGame();
-			setTimeout(function(){
-				resetClickListeners();
-			},1500)
-		});
-		$('#heal').on("click", function() {
-			$('#attack').off('click');
-			$('#defend').off('click');
-			$('#heal').off('click');
-		  if(player.mp == 0){
-		    error.play();
-		  }else{
-				player.choice = "heal"; 
-				runGame();
-			setTimeout(function(){
-				resetClickListeners();
-			},1500)
-			};
-		});
-	}
-
-	$('#attack').on("click", function() {
-		resetClickListeners();		
+		};
 	});
-	$('#defend').on("click", function() {
-		resetClickListeners();
-	});
-	$('#heal').on("click", function() {
-		resetClickListeners();
-	});
-
 
 //Begins intro sequences
 hideBattleItems();
