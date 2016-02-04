@@ -81,6 +81,9 @@ var beginBattle = function(){
 	$('#battle-dialogue').hide();
 	$('#stat-container').show().animate();
 	appendStats();
+	if(battleNumber == 1){
+		$('#monster').animate({	right: "0px", bottom: "60px"});
+	}
 	$('#monster').animate({	right: "0px", bottom: "-10px"});
 	$('#user').animate({	left: "-40px", bottom: "10px"});
 	fight.play();
