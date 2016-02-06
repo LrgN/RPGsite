@@ -6,6 +6,8 @@ var hideBattleItems = function(){
 	$('#stat-container').hide();
 	$('#monster').hide();
 	$('#user').hide();
+	$('#princess').hide();
+	$('#dubus2').hide();
 }
 
 
@@ -83,8 +85,9 @@ var beginBattle = function(){
 	appendStats();
 	if(battleNumber == 1){
 		$('#monster').animate({	right: "0px", bottom: "60px"});
+	}else{
+		$('#monster').animate({	right: "0px", bottom: "-10px"});
 	}
-	$('#monster').animate({	right: "0px", bottom: "-10px"});
 	$('#user').animate({	left: "-40px", bottom: "10px"});
 	fight.play();
 }
@@ -175,6 +178,8 @@ var innSequence = function(){
 //found princess sequence
 var foundPrincess = function(){
 	foundPrincessOver = false;
+	$('#princess').show();
+	$('#dubus2').show();
 	var openText = "You rush up to the princess, and you realize she is crying.  She informs you that she ran off with the wizard and that she is looking for some stability in her life, which a knight can't give her. She pulls a vial of poison out of her pocket and swallows it";
 	var splitOpenText = openText.split("");
 	$(splitOpenText).each(function(index){
