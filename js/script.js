@@ -12,17 +12,17 @@ var hideBattleItems = function(){
 
 
 //creates audio variables for music/sound
-var fight = new Audio('./sounds/fight.mp3');
-var hitAudio = new Audio('./sounds/hit.wav');
-var healAudio = new Audio('./sounds/cure.wav');
-var killAudio = new Audio('./sounds/kill.wav');
-var mAttack = new Audio('./sounds/somersalt.wav');
-var preBattleMusic = new Audio('./sounds/8bit.mp3');
-var error = new Audio('./sounds/error.mp3');
-var introMusic = new Audio('./sounds/intro.mp3');
-var openScene = new Audio('./sounds/openscene.mp3');
-var outroMusic = new Audio('./sounds/torn.m4a')
-var battleNumber = 0;
+var fight = new Audio('./sounds/fight.mp3'),
+hitAudio = new Audio('./sounds/hit.wav'),
+healAudio = new Audio('./sounds/cure.wav'),
+killAudio = new Audio('./sounds/kill.wav'),
+mAttack = new Audio('./sounds/somersalt.wav'),
+preBattleMusic = new Audio('./sounds/8bit.mp3'),
+error = new Audio('./sounds/error.mp3'),
+introMusic = new Audio('./sounds/intro.mp3'),
+openScene = new Audio('./sounds/openscene.mp3'),
+outroMusic = new Audio('./sounds/torn.m4a')
+battleNumber = 0;
 
 //Creates character objects
 var monster = {hp: 30,
@@ -104,37 +104,37 @@ var playScene = function(thisScene, whichDialogue, music, sceneOver, text, nextS
 			$(whichDialogue).append(splitText[index]);
 			if(index + 1 === splitText.length){
 				$(whichDialogue).append("<p>Press Enter to Begin</p>");
-				document.addEventListener('keypress', function(e){
-					var key = e.which || e.keyCode;
-					if(sceneOver == false){
-						if(key === 13){
-							if(battle){
-								music.pause();
-								beginBattle();
-								sceneOver = true;
-							}else{
-								music.pause();
-								nextScene();
-								$(thisScene).hide();
-								sceneOver = true;
-							}
-						}
-					}
-				})
 			}
 		}, 75 * (index + 1));
 	})
+	document.addEventListener('keypress', function(e){
+	var key = e.which || e.keyCode;
+	if(sceneOver == false){
+		if(key === 13){
+			if(battle){
+				music.pause();
+				beginBattle();
+				sceneOver = true;
+			}else{
+				music.pause();
+				nextScene();
+				$(thisScene).hide();
+				sceneOver = true;
+			}
+		}
+	}
+})
 }
 
 //Opening Scene
 var openingScene = function(){
-	var thisScene = ("#opening-screen");
-	var whichDialogue = ("#opening-dialogue");
-	var music = openScene;
-	var sceneOver = false;
-	var text = "THE ADVENTURE OF DUBUS";
-	var nextScene = introSequence;
-	var battle = false;
+	var thisScene = ("#opening-screen"),
+	whichDialogue = ("#opening-dialogue"),
+	music = openScene,
+	sceneOver = false,
+	text = "THE ADVENTURE OF DUBUS",
+	nextScene = introSequence,
+	battle = false;
 	playScene(thisScene, whichDialogue, music, sceneOver, text, nextScene, battle)
 }
 
@@ -190,26 +190,25 @@ var foundPrincess = function(){
 			if(index + 1 === splitOpenText.length){
 				$("#found-princess-dialogue").append("<p>Press Enter to Begin</p>");
 				$("#found-princess-dialogue");
-				document.addEventListener('keypress', function(e){
-					var key = e.which || e.keyCode;
-					if(foundPrincessOver == false){
-						if(key === 13){
-							$("#princess").toggle('explode');
-							mAttack.play();
-							setTimeout(function(){
-								preBattleMusic.pause();
-								outroSequence();
-								$("#inn-container").hide();
-								$("#found-princess-container").hide();
-								$("#dubus2").animate({opacity: "0"});
-								foundPrincessOver = true;
-							},3000)
-
-						}
-					}
-				})
 			}
 		}, 100 * (index + 1));
+	})
+	document.addEventListener('keypress', function(e){
+		var key = e.which || e.keyCode;
+		if(foundPrincessOver == false){
+			if(key === 13){
+				$("#princess").toggle('explode');
+				mAttack.play();
+				setTimeout(function(){
+					preBattleMusic.pause();
+					outroSequence();
+					$("#inn-container").hide();
+					$("#found-princess-container").hide();
+					$("#dubus2").animate({opacity: "0"});
+					foundPrincessOver = true;
+				},3000)
+			}
+		}
 	})
 }
 
@@ -492,7 +491,7 @@ var outroSequence = function(){
 		runGame();
 		setTimeout(function(){
 			resetClickListeners();
-		},1500);		
+		},1000);		
 		});
 		$('#defend').on("click", function() {
 			$('#attack').off('click');
@@ -502,7 +501,7 @@ var outroSequence = function(){
 			runGame();
 			setTimeout(function(){
 				resetClickListeners();
-			},1500)
+			},1000)
 		});
 		$('#heal').on("click", function() {
 			$('#attack').off('click');
@@ -515,7 +514,7 @@ var outroSequence = function(){
 				runGame();
 			setTimeout(function(){
 				resetClickListeners();
-			},1500)
+			},1000)
 			};
 		});
 	}
